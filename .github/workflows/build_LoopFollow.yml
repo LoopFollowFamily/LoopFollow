@@ -207,6 +207,9 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           submodules: recursive
           ref: ${{ env.TARGET_BRANCH }}
+           
+      - name: Update Fastlane
+        run: bundle update fastlane
 
       # Patch Fastlane Match to not print tables
       - name: Patch Match Tables
