@@ -210,8 +210,9 @@ jobs:
            
       - name: Update Fastlane and Install Dependencies
         run: |
-         bundle update fastlane --verbose
-         bundle install --verbose
+           bundle update fastlane --verbose
+           bundle install
+           bundle exec fastlane --version
 
       # Patch Fastlane Match to not print tables
       - name: Patch Match Tables
