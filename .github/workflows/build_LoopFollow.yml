@@ -209,7 +209,9 @@ jobs:
           ref: ${{ env.TARGET_BRANCH }}
            
       - name: Update Fastlane
-        run: bundle update fastlane
+        run: |
+         bundle update fastlane --verbose
+         bundle install
 
       # Patch Fastlane Match to not print tables
       - name: Patch Match Tables
