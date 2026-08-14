@@ -208,10 +208,10 @@ jobs:
           submodules: recursive
           ref: ${{ env.TARGET_BRANCH }}
            
-      - name: Update Fastlane
+      - name: Update Fastlane and Install Dependencies
         run: |
          bundle update fastlane --verbose
-         bundle install
+         bundle install --verbose
 
       # Patch Fastlane Match to not print tables
       - name: Patch Match Tables
