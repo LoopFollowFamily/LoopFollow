@@ -73,6 +73,10 @@ platform :ios do
       build_number: current_build_number
     )      
     
+    # First, ensure identifiers and capabilities are set up
+    identifiers
+    
+    # Then get matching certificates and provisioning profiles
     match(
       type: "appstore",
       git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
