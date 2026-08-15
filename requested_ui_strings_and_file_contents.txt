@@ -1,0 +1,3393 @@
+UI strings + full file contents
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/WelcomeStepView.swift
+UI STRINGS:
+- Welcome to LoopFollow
+- You're already set up. You can skip this guide, or walk through it to review your settings.
+- Let's get you connected to your data and set up a few recommended alarms. It only takes a few minutes.
+- Skip
+- Review setup anyway
+- Get Started
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// WelcomeStepView.swift
+
+import SwiftUI
+
+struct WelcomeStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var animate = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Spacer()
+
+            VStack(spacing: 20) {
+                AnimatedLoopFollowLogo(size: 140)
+                    .frame(height: 160)
+                    .opacity(animate || reduceMotion ? 1 : 0)
+
+                Text("Welcome to LoopFollow")
+                    .font(.largeTitle.weight(.bold))
+                    .multilineTextAlignment(.center)
+
+                Text(viewModel.isAlreadyConfigured
+                    ? "You're already set up. You can skip this guide, or walk through it to review your settings."
+                    : "Let's get you connected to your data and set up a few recommended alarms. It only takes a few minutes.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+
+            Spacer()
+
+            VStack(spacing: 12) {
+                if viewModel.isAlreadyConfigured {
+                    Button { viewModel.skip() } label: {
+                        primaryLabel("Skip")
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button { advance() } label: {
+                        Text("Review setup anyway")
+                            .font(.body.weight(.medium))
+                    }
+                } else {
+                    Button { advance() } label: {
+                        primaryLabel("Get Started")
+                    }
+                    .buttonStyle(.borderedProminent)
+
+                    Button { viewModel.skip() } label: {
+                        Text("Skip")
+                            .font(.body.weight(.medium))
+                    }
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 32)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.7).delay(0.1)) {
+                animate = true
+            }
+        }
+    }
+
+    private func primaryLabel(_ text: String) -> some View {
+        Text(text)
+            .font(.body.weight(.semibold))
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 4)
+    }
+
+    private func advance() {
+        if reduceMotion {
+            viewModel.advance()
+        } else {
+            withAnimation(.easeInOut(duration: 0.3)) { viewModel.advance() }
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/OverviewStepView.swift
+UI STRINGS:
+- Connect your data
+- Link a Nightscout site or a Dexcom Share account.
+- Units & metrics
+- Choose how glucose and statistics are shown.
+- Recommended alarms
+- Turn on a few useful alarms with sensible defaults.
+- Finish up
+- Arrange your tabs and set notification preferences.
+- Here's what we'll do
+- A quick, straightforward setup — about 5 minutes. You can change anything later in Settings.
+- You're all set
+- Your data source is connected and your alarms are in place — there's nothing to set up here. You can fine-tune anything later in Settings.
+- Done
+- Continue
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// OverviewStepView.swift
+
+import SwiftUI
+
+/// A quick map of what the rest of setup covers, so the user knows what to
+/// expect. The list reflects the phases that will actually run — a returning
+/// user who's already connected won't see "Connect your data" — and collapses to
+/// a short "you're all set" when there's nothing left to configure.
+struct OverviewStepView: View {
+    @ObservedObject var onboarding: OnboardingViewModel
+
+    private struct Item: Identifiable {
+        let id = UUID()
+        let icon: String
+        let title: String
+        let detail: String
+    }
+
+    /// The overview rows, derived from the phases that will actually run.
+    private var items: [Item] {
+        let steps = onboarding.activeSteps
+        var result: [Item] = []
+        if steps.contains(.connect) {
+            result.append(Item(icon: "antenna.radiowaves.left.and.right",
+                               title: "Connect your data",
+                               detail: "Link a Nightscout site or a Dexcom Share account."))
+        }
+        if steps.contains(.units) {
+            result.append(Item(icon: "ruler",
+                               title: "Units & metrics",
+                               detail: "Choose how glucose and statistics are shown."))
+        }
+        if steps.contains(.alarms) {
+            result.append(Item(icon: "bell.badge.fill",
+                               title: "Recommended alarms",
+                               detail: "Turn on a few useful alarms with sensible defaults."))
+        }
+        if steps.contains(.tabOrder) {
+            result.append(Item(icon: "square.grid.2x2",
+                               title: "Finish up",
+                               detail: "Arrange your tabs and set notification preferences."))
+        }
+        return result
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if onboarding.hasNothingToSetUp {
+                allSet
+            } else {
+                checklist
+            }
+            footer
+        }
+    }
+
+    // MARK: - Content
+
+    private var checklist: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                OnboardingStepHeader(
+                    systemImage: "list.bullet.rectangle",
+                    title: "Here's what we'll do",
+                    subtitle: "A quick, straightforward setup — about 5 minutes. You can change anything later in Settings."
+                )
+                .padding(.horizontal)
+
+                VStack(spacing: 14) {
+                    ForEach(items) { item in
+                        HStack(alignment: .top, spacing: 14) {
+                            Image(systemName: item.icon)
+                                .font(.title3)
+                                .foregroundStyle(Color.accentColor)
+                                .frame(width: 32)
+
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text(item.title)
+                                    .font(.headline)
+                                Text(item.detail)
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+                                    .multilineTextAlignment(.leading)
+                            }
+
+                            Spacer(minLength: 0)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding()
+                        .background(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .fill(Color(.secondarySystemGroupedBackground))
+                        )
+                    }
+                }
+                .padding(.horizontal)
+            }
+            .padding(.bottom, 24)
+        }
+    }
+
+    private var allSet: some View {
+        ScrollView {
+            OnboardingStepHeader(
+                systemImage: "checkmark.circle",
+                title: "You're all set",
+                subtitle: "Your data source is connected and your alarms are in place — there's nothing to set up here. You can fine-tune anything later in Settings."
+            )
+            .padding(.horizontal)
+            .padding(.top, 24)
+        }
+    }
+
+    // MARK: - Footer
+
+    private var footer: some View {
+        OnboardingNavFooter(
+            continueTitle: onboarding.hasNothingToSetUp ? "Done" : "Continue",
+            continueEnabled: true,
+            showBack: onboarding.canGoBack,
+            onBack: { onboarding.goBack() },
+            onContinue: {
+                if onboarding.hasNothingToSetUp {
+                    onboarding.finish()
+                } else {
+                    onboarding.advance()
+                }
+            }
+        )
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/CompletionStepView.swift
+UI STRINGS:
+- Contact image
+- Show your glucose on your Apple Watch face through a contact.
+- Custom alarms
+- Build your own alarms beyond the recommended set.
+- Remote commands
+- Send carbs, boluses, and temp targets to Trio or Loop.
+- You're all set
+- You're ready to go. Adjust everything later from the Menu — and when you have a moment, these are worth a look:
+- Finish
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// CompletionStepView.swift
+
+import SwiftUI
+
+struct CompletionStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var animate = false
+
+    /// A short tease of optional features worth discovering later — not part of
+    /// setup, just a nudge toward a few things that are easy to miss.
+    private struct Gem: Identifiable {
+        let id = UUID()
+        let icon: String
+        let title: String
+        let detail: String
+    }
+
+    private let gems: [Gem] = [
+        Gem(icon: "person.crop.square",
+            title: "Contact image",
+            detail: "Show your glucose on your Apple Watch face through a contact."),
+        Gem(icon: "bell.badge",
+            title: "Custom alarms",
+            detail: "Build your own alarms beyond the recommended set."),
+        Gem(icon: "dot.radiowaves.left.and.right",
+            title: "Remote commands",
+            detail: "Send carbs, boluses, and temp targets to Trio or Loop."),
+    ]
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Spacer(minLength: 24)
+
+            VStack(spacing: 16) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 84, weight: .semibold))
+                    .foregroundStyle(.green.gradient)
+                    .scaleEffect(animate || reduceMotion ? 1 : 0.6)
+                    .opacity(animate || reduceMotion ? 1 : 0)
+
+                Text("You're all set")
+                    .font(.largeTitle.weight(.bold))
+                    .multilineTextAlignment(.center)
+
+                Text("You're ready to go. Adjust everything later from the Menu — and when you have a moment, these are worth a look:")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 32)
+            }
+
+            gemsCard
+                .padding(.top, 28)
+                .padding(.horizontal, 24)
+
+            Spacer(minLength: 24)
+
+            Button { viewModel.finish() } label: {
+                Text("Finish")
+                    .font(.body.weight(.semibold))
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 4)
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.horizontal, 24)
+            .padding(.bottom, 32)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            guard !reduceMotion else { return }
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.6).delay(0.1)) {
+                animate = true
+            }
+        }
+    }
+
+    private var gemsCard: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            ForEach(gems) { gem in
+                HStack(alignment: .top, spacing: 12) {
+                    Image(systemName: gem.icon)
+                        .font(.body)
+                        .foregroundStyle(Color.accentColor)
+                        .frame(width: 26)
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(gem.title)
+                            .font(.subheadline.weight(.semibold))
+                        Text(gem.detail)
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.leading)
+                    }
+
+                    Spacer(minLength: 0)
+                }
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding()
+        .background(
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color(.secondarySystemGroupedBackground))
+        )
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/TelemetryStepView.swift
+UI STRINGS:
+- Help us help you
+- You can choose to share anonymous information with the developers to help improve LoopFollow — such as app and iOS version, device type, which app you're following, and a few settings. Your health data, credentials, time zone, and logs remain on your device.
+- See exactly what's sent
+- You can change this any time in Settings → General → Diagnostics.
+- Yes, send anonymous stats
+- No thanks
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// TelemetryStepView.swift
+
+import SwiftUI
+
+/// In-flow telemetry consent. Mirrors `TelemetryConsentView` but records the
+/// decision and continues the wizard instead of dismissing a sheet.
+struct TelemetryStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+    @State private var showPreview = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 16) {
+                Image(systemName: "chart.bar.doc.horizontal")
+                    .font(.system(size: 44, weight: .semibold))
+                    .foregroundStyle(Color.accentColor)
+
+                Text("Help us help you")
+                    .font(.title2.weight(.bold))
+
+                Text("You can choose to share anonymous information with the developers to help improve LoopFollow — such as app and iOS version, device type, which app you're following, and a few settings. Your health data, credentials, time zone, and logs remain on your device.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+
+                Button { showPreview = true } label: {
+                    Label("See exactly what's sent", systemImage: "doc.text.magnifyingglass")
+                        .font(.subheadline)
+                }
+
+                Text("You can change this any time in Settings → General → Diagnostics.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+            .padding(.top, 8)
+
+            Spacer()
+
+            VStack(spacing: 12) {
+                Button { decide(true) } label: {
+                    Text("Yes, send anonymous stats")
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button { decide(false) } label: {
+                    Text("No thanks")
+                        .font(.body.weight(.medium))
+                }
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 24)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .sheet(isPresented: $showPreview) {
+            NavigationStack {
+                TelemetryPreviewView()
+            }
+        }
+    }
+
+    private func decide(_ enabled: Bool) {
+        Storage.shared.telemetryEnabled.value = enabled
+        Storage.shared.telemetryConsentDecisionMade.value = true
+        if enabled {
+            // Fire the inaugural ping immediately, then start the 24h cadence.
+            Task.detached {
+                await TelemetryClient.shared.maybeSend()
+                TelemetryClient.shared.scheduleRecurring()
+            }
+        }
+        viewModel.advance()
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/DataSourceChoiceStepView.swift
+UI STRINGS:
+- Choose a data source
+- LoopFollow needs a glucose data source. Pick one now — you can change or add more later in Settings.
+- Nightscout
+- Follow a Nightscout site. Works with Loop, Trio, and most uploaders. Enables the full set of LoopFollow features.
+- Dexcom Share
+- Follow glucose directly from a Dexcom Share account, without a Nightscout site.
+- Copy from another phone
+- Already using LoopFollow on another phone? Scan its QR code to copy the connection here.
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// DataSourceChoiceStepView.swift
+
+import SwiftUI
+
+struct DataSourceChoiceStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+
+    var body: some View {
+        ScrollView {
+            VStack(spacing: 24) {
+                OnboardingStepHeader(
+                    systemImage: "antenna.radiowaves.left.and.right",
+                    title: "Choose a data source",
+                    subtitle: "LoopFollow needs a glucose data source. Pick one now — you can change or add more later in Settings."
+                )
+                .padding(.horizontal)
+
+                VStack(spacing: 14) {
+                    choiceCard(
+                        source: .nightscout,
+                        icon: "globe",
+                        title: "Nightscout",
+                        detail: "Follow a Nightscout site. Works with Loop, Trio, and most uploaders. Enables the full set of LoopFollow features."
+                    )
+                    choiceCard(
+                        source: .dexcom,
+                        icon: "sensor.tag.radiowaves.forward.fill",
+                        title: "Dexcom Share",
+                        detail: "Follow glucose directly from a Dexcom Share account, without a Nightscout site."
+                    )
+                    choiceCard(
+                        source: .copyFromPhone,
+                        icon: "qrcode",
+                        title: "Copy from another phone",
+                        detail: "Already using LoopFollow on another phone? Scan its QR code to copy the connection here."
+                    )
+                }
+                .padding(.horizontal)
+            }
+            .padding(.bottom, 24)
+        }
+    }
+
+    private func choiceCard(source: OnboardingViewModel.DataSource, icon: String, title: String, detail: String) -> some View {
+        let isSelected = viewModel.dataSource == source
+        return Button {
+            viewModel.dataSource = source
+        } label: {
+            HStack(alignment: .top, spacing: 14) {
+                Image(systemName: icon)
+                    .font(.title2)
+                    .foregroundStyle(isSelected ? Color.accentColor : .secondary)
+                    .frame(width: 32)
+
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(title)
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    Text(detail)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.leading)
+                }
+
+                Spacer(minLength: 0)
+
+                Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                    .font(.title3)
+                    .foregroundStyle(isSelected ? Color.accentColor : Color(.systemGray3))
+            }
+            .padding()
+            .background(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(Color(.secondarySystemGroupedBackground))
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .stroke(isSelected ? Color.accentColor : Color.clear, lineWidth: 2)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/NotificationsStepView.swift
+UI STRINGS:
+- Stay informed
+- LoopFollow uses notifications to deliver your alarms — like low or high glucose, or a missed reading. Without them, alarms can't reach you when the app is in the background.
+- We'll ask iOS for permission next. You can change this any time in the Settings app.
+- Enable Notifications
+- Not now
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// NotificationsStepView.swift
+
+import SwiftUI
+
+/// A short context screen ahead of the system notification prompt, following
+/// Apple's pre-alert guidance. The system prompt is triggered from here — before
+/// the final screen — so it never appears on top of "You're all set".
+struct NotificationsStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+    @State private var requesting = false
+
+    var body: some View {
+        VStack(spacing: 0) {
+            VStack(alignment: .leading, spacing: 20) {
+                Image(systemName: "bell.badge.fill")
+                    .font(.system(size: 44, weight: .semibold))
+                    .foregroundStyle(Color.accentColor)
+
+                Text("Stay informed")
+                    .font(.title2.weight(.bold))
+
+                Text("LoopFollow uses notifications to deliver your alarms — like low or high glucose, or a missed reading. Without them, alarms can't reach you when the app is in the background.")
+                    .font(.body)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+
+                Text("We'll ask iOS for permission next. You can change this any time in the Settings app.")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                    .multilineTextAlignment(.leading)
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .padding(.horizontal)
+            .padding(.top, 8)
+
+            Spacer()
+
+            VStack(spacing: 12) {
+                Button {
+                    guard !requesting else { return }
+                    requesting = true
+                    NotificationAuthorization.requestIfNeeded {
+                        viewModel.advance()
+                    }
+                } label: {
+                    Text("Enable Notifications")
+                        .font(.body.weight(.semibold))
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(requesting)
+
+                Button { viewModel.advance() } label: {
+                    Text("Not now")
+                        .font(.body.weight(.medium))
+                }
+                .disabled(requesting)
+            }
+            .padding(.horizontal, 24)
+            .padding(.bottom, 24)
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/UnitsStepView.swift
+UI STRINGS:
+- Units
+- Choose how glucose values are displayed. You can change this later in Settings.
+- Statistics
+- Choose how LoopFollow's statistics are measured and displayed.
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// UnitsStepView.swift
+
+import SwiftUI
+
+/// The units phase, split into two lighter pages so it doesn't feel heavy:
+/// 1. **Units** — the glucose display unit on its own.
+/// 2. **Statistics** — range mode and the glycemic/variability metrics LoopFollow
+///    shows.
+///
+/// Both pages reuse `UnitsConfigurationView`, each rendering only its subset of
+/// sections. The phase reports its within-phase position through
+/// `phaseProgress` so the progress bar fills smoothly across the two pages.
+struct UnitsStepView: View {
+    @ObservedObject var onboarding: OnboardingViewModel
+
+    private enum Page: Int, CaseIterable { case units, statistics }
+    @State private var page: Page = .units
+
+    var body: some View {
+        VStack(spacing: 0) {
+            Form {
+                switch page {
+                case .units:
+                    header(
+                        systemImage: "ruler",
+                        title: "Units",
+                        subtitle: "Choose how glucose values are displayed. You can change this later in Settings."
+                    )
+                    UnitsConfigurationView(sections: .units)
+                case .statistics:
+                    header(
+                        systemImage: "chart.bar.xaxis",
+                        title: "Statistics",
+                        subtitle: "Choose how LoopFollow's statistics are measured and displayed."
+                    )
+                    UnitsConfigurationView(sections: .statistics)
+                }
+            }
+
+            footer
+        }
+        .onAppear { reportProgress() }
+        .onChange(of: page) { _ in reportProgress() }
+    }
+
+    private func reportProgress() {
+        onboarding.phaseProgress = .init(page: page.rawValue, count: Page.allCases.count)
+    }
+
+    private func header(systemImage: String, title: String, subtitle: String) -> some View {
+        Section {
+            EmptyView()
+        } header: {
+            OnboardingStepHeader(
+                systemImage: systemImage,
+                title: title,
+                subtitle: subtitle
+            )
+            .textCase(nil)
+            .padding(.bottom, 8)
+        }
+        .listRowInsets(EdgeInsets())
+        .listRowBackground(Color.clear)
+    }
+
+    @ViewBuilder
+    private var footer: some View {
+        switch page {
+        case .units:
+            OnboardingNavFooter(
+                continueEnabled: true,
+                showBack: onboarding.canGoBack,
+                onBack: { onboarding.goBack() },
+                onContinue: { withAnimation(.easeInOut(duration: 0.25)) { page = .statistics } }
+            )
+        case .statistics:
+            OnboardingNavFooter(
+                continueEnabled: true,
+                showBack: true,
+                onBack: { withAnimation(.easeInOut(duration: 0.25)) { page = .units } },
+                onContinue: { onboarding.advance() }
+            )
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/AlarmsStepView.swift
+UI STRINGS:
+- [dynamic] display.title / display.detail from seed alarm definitions
+- Enable this alarm
+- Alert below
+- Warn early by
+- min
+- Alert above
+- Only after high for
+- Drop per reading
+- Readings in a row
+- No reading for
+- No loop for
+- At or below
+- U
+- g
+- Remind after
+- days
+- Active during
+- [dynamic explanation] Warns when glucose falls by at least … between two readings.
+- [dynamic explanation] Warns when glucose falls by at least … on each of … readings in a row — about … over roughly … minutes.
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// AlarmsStepView.swift
+
+import HealthKit
+import SwiftUI
+
+/// The alarms phase: one recommended alarm per page, each with a toggle and a few
+/// of its most useful settings. The number of pages depends on the data source
+/// (Dexcom-only followers don't see loop/pump alarms), which the phase reports via
+/// `phaseProgress` so the overall progress bar stays accurate.
+struct AlarmsStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+
+    /// Page index into `offeredIndices`.
+    @State private var index = 0
+
+    /// Indices into `viewModel.seedAlarms` that are offered for this data source.
+    private var offeredIndices: [Int] {
+        viewModel.seedAlarms.indices.filter { viewModel.isOffered(viewModel.seedAlarms[$0]) }
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            if let seedIndex = offeredIndices[safe: index] {
+                alarmPage(seedIndex: seedIndex)
+            }
+
+            OnboardingNavFooter(
+                continueEnabled: true,
+                showBack: true,
+                onBack: goBack,
+                onContinue: goForward
+            )
+        }
+        .onAppear(perform: reportProgress)
+        .onChange(of: index) { _ in reportProgress() }
+    }
+
+    private func reportProgress() {
+        viewModel.phaseProgress = .init(page: index, count: offeredIndices.count)
+    }
+
+    private func goForward() {
+        if index < offeredIndices.count - 1 {
+            withAnimation(.easeInOut(duration: 0.25)) { index += 1 }
+        } else {
+            viewModel.advance()
+        }
+    }
+
+    private func goBack() {
+        if index > 0 {
+            withAnimation(.easeInOut(duration: 0.25)) { index -= 1 }
+        } else {
+            viewModel.goBack()
+        }
+    }
+
+    // MARK: - Page
+
+    private func alarmPage(seedIndex: Int) -> some View {
+        let seed = $viewModel.seedAlarms[seedIndex]
+        let display = viewModel.seedAlarms[seedIndex]
+        return Form {
+            Section {
+                EmptyView()
+            } header: {
+                VStack(spacing: 8) {
+                    Image(systemName: display.icon)
+                        .font(.system(size: 40, weight: .semibold))
+                        .foregroundStyle(Color.accentColor)
+                    Text(display.title)
+                        .font(.title2.weight(.bold))
+                    Text(display.detail)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .frame(maxWidth: .infinity)
+                .textCase(nil)
+                .padding(.bottom, 8)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+
+            Section {
+                Toggle("Enable this alarm", isOn: seed.isEnabled)
+
+                if seed.wrappedValue.isEnabled {
+                    controls(for: seed)
+                }
+            } footer: {
+                if seed.wrappedValue.isEnabled, let text = explanation(for: seed.wrappedValue) {
+                    Text(text)
+                }
+            }
+        }
+    }
+
+    // MARK: - Per-alarm controls
+
+    @ViewBuilder
+    private func controls(for seed: Binding<OnboardingViewModel.SeedAlarm>) -> some View {
+        switch seed.wrappedValue.type {
+        case .low:
+            bgPicker(seed, title: "Alert below", range: 40 ... 150, keyPath: \.belowBG)
+            intStepper(seed, label: "Warn early by", range: 0 ... 30, step: 5, unit: "min", keyPath: \.predictiveMinutes)
+        case .high:
+            bgPicker(seed, title: "Alert above", range: 120 ... 350, keyPath: \.aboveBG)
+            intStepper(seed, label: "Only after high for", range: 0 ... 60, step: 5, unit: "min", keyPath: \.persistentMinutes)
+        case .fastDrop:
+            bgPicker(seed, title: "Drop per reading", range: 3 ... 54, keyPath: \.delta)
+            intStepper(seed, label: "Readings in a row", range: 1 ... 3, step: 1, unit: "", keyPath: \.monitoringWindow)
+        case .missedReading:
+            doubleStepper(seed, label: "No reading for", range: 11 ... 121, step: 5, unit: "min", keyPath: \.threshold)
+        case .notLooping:
+            doubleStepper(seed, label: "No loop for", range: 16 ... 61, step: 5, unit: "min", keyPath: \.threshold)
+        case .battery:
+            doubleStepper(seed, label: "At or below", range: 0 ... 100, step: 5, unit: "%", keyPath: \.threshold)
+        case .iob:
+            doubleStepper(seed, label: "Alert above", range: 0 ... 30, step: 1, unit: "U", keyPath: \.threshold)
+        case .cob:
+            doubleStepper(seed, label: "Alert above", range: 0 ... 200, step: 5, unit: "g", keyPath: \.threshold)
+        case .sensorChange:
+            doubleStepper(seed, label: "Remind after", range: 1 ... 15, step: 1, unit: "days", keyPath: \.threshold)
+            activePicker(seed)
+        case .pumpChange:
+            doubleStepper(seed, label: "Remind after", range: 1 ... 7, step: 1, unit: "days", keyPath: \.threshold)
+            activePicker(seed)
+        case .pump:
+            doubleStepper(seed, label: "Alert below", range: 0 ... 100, step: 5, unit: "U", keyPath: \.threshold)
+        default:
+            EmptyView()
+        }
+    }
+
+    private func bgPicker(
+        _ seed: Binding<OnboardingViewModel.SeedAlarm>,
+        title: String,
+        range: ClosedRange<Double>,
+        keyPath: WritableKeyPath<Alarm, Double?>
+    ) -> some View {
+        BGPicker(title: title, range: range, value: doubleBinding(seed, keyPath: keyPath))
+    }
+
+    private func doubleStepper(
+        _ seed: Binding<OnboardingViewModel.SeedAlarm>,
+        label: String,
+        range: ClosedRange<Double>,
+        step: Double,
+        unit: String,
+        keyPath: WritableKeyPath<Alarm, Double?>
+    ) -> some View {
+        let value = doubleBinding(seed, keyPath: keyPath)
+        return Stepper(value: value, in: range, step: step) {
+            labelRow(label, value: "\(formatted(value.wrappedValue)) \(unit)")
+        }
+    }
+
+    private func intStepper(
+        _ seed: Binding<OnboardingViewModel.SeedAlarm>,
+        label: String,
+        range: ClosedRange<Int>,
+        step: Int,
+        unit: String,
+        keyPath: WritableKeyPath<Alarm, Int?>
+    ) -> some View {
+        let value = intBinding(seed, keyPath: keyPath)
+        let text = unit.isEmpty ? "\(value.wrappedValue)" : "\(value.wrappedValue) \(unit)"
+        return Stepper(value: value, in: range, step: step) {
+            labelRow(label, value: text)
+        }
+    }
+
+    /// Plain-language summary of what a recommended alarm will do, shown as the
+    /// section footer. Fast drop earns one because its per-reading-times-window
+    /// behaviour isn't obvious from the two controls alone.
+    private func explanation(for seed: OnboardingViewModel.SeedAlarm) -> String? {
+        switch seed.type {
+        case .fastDrop:
+            let alarm = seed.alarm
+            let fallback = Alarm(type: .fastDrop)
+            let delta = alarm.delta ?? fallback.delta ?? 0
+            let window = alarm.monitoringWindow ?? fallback.monitoringWindow ?? 0
+            guard delta > 0, window > 0 else { return nil }
+
+            let unit = Localizer.getPreferredUnit().localizedShortUnitString
+            let perReading = Localizer.formatQuantity(delta)
+
+            if window == 1 {
+                return "Warns when glucose falls by at least \(perReading) \(unit) between two readings."
+            }
+            let total = Localizer.formatQuantity(delta * Double(window))
+            let minutes = window * 5
+            return "Warns when glucose falls by at least \(perReading) \(unit) on each of \(window) readings in a row — about \(total) \(unit) over roughly \(minutes) minutes."
+        default:
+            return nil
+        }
+    }
+
+    /// Day/night picker for reminder alarms (sensor/pump change), so they don't
+    /// fire overnight by default. Reuses the same menu picker as the full editor.
+    private func activePicker(_ seed: Binding<OnboardingViewModel.SeedAlarm>) -> some View {
+        let binding = Binding<ActiveOption>(
+            get: { seed.wrappedValue.alarm.activeOption },
+            set: { seed.wrappedValue.alarm.activeOption = $0 }
+        )
+        return AlarmEnumMenuPicker(title: "Active during", selection: binding)
+    }
+
+    private func labelRow(_ label: String, value: String) -> some View {
+        HStack {
+            Text(label)
+            Spacer()
+            Text(value).foregroundColor(.secondary)
+        }
+    }
+
+    private func formatted(_ value: Double) -> String {
+        value == value.rounded() ? String(Int(value)) : String(format: "%.1f", value)
+    }
+
+    private func doubleBinding(
+        _ seed: Binding<OnboardingViewModel.SeedAlarm>,
+        keyPath: WritableKeyPath<Alarm, Double?>
+    ) -> Binding<Double> {
+        Binding(
+            get: { seed.wrappedValue.alarm[keyPath: keyPath] ?? typeDefault(seed, keyPath) },
+            set: { seed.wrappedValue.alarm[keyPath: keyPath] = $0 }
+        )
+    }
+
+    private func intBinding(
+        _ seed: Binding<OnboardingViewModel.SeedAlarm>,
+        keyPath: WritableKeyPath<Alarm, Int?>
+    ) -> Binding<Int> {
+        Binding(
+            get: { seed.wrappedValue.alarm[keyPath: keyPath] ?? typeDefault(seed, keyPath) },
+            set: { seed.wrappedValue.alarm[keyPath: keyPath] = $0 }
+        )
+    }
+
+    /// Fallback value for a control, read from a fresh `Alarm(type:)` so the
+    /// onboarding controls share the one source of truth for per-type defaults
+    /// and can't drift from them. Only a safety net — seeded alarms already carry
+    /// these values, so the fallback is rarely exercised.
+    private func typeDefault(_ seed: Binding<OnboardingViewModel.SeedAlarm>, _ keyPath: KeyPath<Alarm, Double?>) -> Double {
+        Alarm(type: seed.wrappedValue.type)[keyPath: keyPath] ?? 0
+    }
+
+    private func typeDefault(_ seed: Binding<OnboardingViewModel.SeedAlarm>, _ keyPath: KeyPath<Alarm, Int?>) -> Int {
+        Alarm(type: seed.wrappedValue.type)[keyPath: keyPath] ?? 0
+    }
+}
+
+private extension Array {
+    subscript(safe index: Int) -> Element? {
+        indices.contains(index) ? self[index] : nil
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/TabOrderStepView.swift
+UI STRINGS:
+- Arrange your tabs
+- Pick which features sit in the tab bar. You can always reach everything through the Menu.
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// TabOrderStepView.swift
+
+import SwiftUI
+
+/// Lets the user arrange which features live in the tab bar versus the Menu,
+/// during onboarding. Reuses the same drag-to-reorder list as the Settings
+/// "Tabs" screen so behavior stays identical.
+struct TabOrderStepView: View {
+    var body: some View {
+        VStack(spacing: 0) {
+            OnboardingStepHeader(
+                systemImage: "square.grid.2x2",
+                title: "Arrange your tabs",
+                subtitle: "Pick which features sit in the tab bar. You can always reach everything through the Menu."
+            )
+            .padding(.horizontal)
+            .padding(.top, 8)
+
+            TabCustomizationModal()
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/Steps/ConnectImportStepView.swift
+UI STRINGS:
+- Copy from another phone
+- On your other phone, open Settings → Nightscout (or Dexcom Share) → Import/Export and export to a QR code. Then scan it here.
+- Scan a different code
+- Scan QR Code
+- Settings imported — you're connected.
+- [dynamic] importVM.qrCodeErrorMessage
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// ConnectImportStepView.swift
+
+import SwiftUI
+
+/// The "copy from another phone" connect path: scan a QR code exported from an
+/// already-configured LoopFollow and apply those settings. Reuses the same
+/// scanner, preview, and import logic as Settings → Import/Export.
+struct ConnectImportStepView: View {
+    @ObservedObject var viewModel: OnboardingViewModel
+    @StateObject private var importVM = ImportExportSettingsViewModel()
+
+    private var importSucceeded: Bool {
+        importVM.qrCodeErrorMessage.contains("Successfully imported")
+    }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            form
+            OnboardingNavFooter(
+                continueEnabled: viewModel.didImportSettings,
+                showBack: viewModel.canGoBack,
+                onBack: { viewModel.goBack() },
+                onContinue: { viewModel.advance() }
+            )
+        }
+    }
+
+    private var form: some View {
+        Form {
+            Section {
+                EmptyView()
+            } header: {
+                OnboardingStepHeader(
+                    systemImage: "qrcode",
+                    title: "Copy from another phone",
+                    subtitle: "On your other phone, open Settings → Nightscout (or Dexcom Share) → Import/Export and export to a QR code. Then scan it here."
+                )
+                .textCase(nil)
+                .padding(.bottom, 8)
+            }
+            .listRowInsets(EdgeInsets())
+            .listRowBackground(Color.clear)
+
+            Section {
+                Button {
+                    importVM.isShowingQRCodeScanner = true
+                } label: {
+                    HStack {
+                        Image(systemName: "qrcode.viewfinder")
+                            .foregroundColor(.accentColor)
+                        Text(viewModel.didImportSettings ? "Scan a different code" : "Scan QR Code")
+                    }
+                }
+            }
+
+            if viewModel.didImportSettings {
+                Section {
+                    Label("Settings imported — you're connected.", systemImage: "checkmark.circle.fill")
+                        .foregroundColor(.green)
+                }
+            } else if !importVM.qrCodeErrorMessage.isEmpty {
+                Section {
+                    Text(importVM.qrCodeErrorMessage)
+                        .font(.caption)
+                        .foregroundColor(.red)
+                }
+            }
+        }
+        .sheet(isPresented: $importVM.isShowingQRCodeScanner) {
+            SimpleQRCodeScannerView { result in
+                importVM.handleQRCodeScanResult(result)
+            }
+        }
+        .sheet(isPresented: $importVM.showImportConfirmation) {
+            ImportConfirmationView(viewModel: importVM)
+        }
+        .onChange(of: importVM.qrCodeErrorMessage) { message in
+            if message.contains("Successfully imported") {
+                viewModel.didImportSettings = true
+            }
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Onboarding/OnboardingNavFooter.swift
+UI STRINGS:
+- Continue
+- Back
+- [dynamic] continueTitle
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// OnboardingNavFooter.swift
+
+import SwiftUI
+
+/// The shared Back / Continue footer used both by the container's chrome and by
+/// phases that manage their own internal pages (connect, alarms), so the controls
+/// look and behave identically everywhere.
+struct OnboardingNavFooter: View {
+    var continueTitle: String = "Continue"
+    var continueEnabled: Bool = true
+    var showBack: Bool = true
+    var onBack: () -> Void
+    var onContinue: () -> Void
+
+    var body: some View {
+        HStack {
+            if showBack {
+                Button(action: onBack) {
+                    Label("Back", systemImage: "chevron.left")
+                        .font(.body.weight(.medium))
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Spacer()
+
+            Button(action: onContinue) {
+                Text(continueTitle)
+                    .font(.body.weight(.semibold))
+                    .frame(minWidth: 120)
+            }
+            .buttonStyle(.borderedProminent)
+            .disabled(!continueEnabled)
+        }
+        .padding()
+        .background(.bar)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/SettingsMenuView.swift
+UI STRINGS:
+- Settings
+- Data Settings
+- Display Settings
+- App Settings
+- Alarms
+- Integrations
+- Advanced Settings
+- Nightscout
+- Dexcom
+- General
+- Graph
+- Information Display
+- Units and Metrics
+- Tabs
+- Background Refresh
+- Import/Export
+- APN
+- Live Activity
+- Remote
+- Calendar
+- Contact
+- Advanced
+- URL
+- Access Token
+- Enable WebSocket
+- User Name
+- Password
+- Server
+- Display App Badge
+- Persistent Notification
+- Appearance
+- Display Stats
+- Display Small Graph
+- Color BG Text
+- Keep Screen Active
+- Show Display Name
+- Snoozer emoji
+- Force portrait mode
+- Time Zone Override
+- Speak BG
+- Send anonymous usage stats
+- Display Dots
+- Display Lines
+- Show DIA Lines
+- Show −30 min Line
+- Show −90 min Line
+- Show Yesterday's BG
+- Show Midnight Lines
+- Show Carb/Bolus Values
+- Show Carb Absorption
+- Treatments on Small Graph
+- Small Graph Height
+- Hours of Prediction
+- Prediction Style
+- Min Basal
+- Min BG Scale
+- Show Days Back
+- Hide Information Table
+- Glucose Unit
+- Range Mode
+- Glycemic Metrics
+- Variability
+- Background Refresh Type
+- Scan QR Code to Import Settings
+- Export Settings To QR Code
+- APNS Key ID
+- APNS Key
+- Enable Live Activity
+- Restart Live Activity
+- Grid Slots
+- Loop Remote Control
+- Trio Remote Control
+- Meal with Bolus
+- Meal with Fat/Protein
+- Guardrails
+- Bolus Increment
+- Shared Secret
+- QR Code URL
+- All Alerts Snoozed
+- All Sounds Muted
+- Day starts
+- Night starts
+- Override System Volume
+- Audio During Calls
+- Ignore Zero BG
+- Auto-Snooze CGM Start
+- Volume Buttons Snooze Alarms
+- Save BG to Calendar
+- Calendar Text
+- Enable Contact BG Updates
+- Background Color
+- Color Mode
+- Text Color
+- Show Trend
+- Show Delta
+- Show IOB
+- Download Treatments
+- Download Prediction
+- Graph Basal
+- Graph Bolus
+- Graph Carbs
+- Graph Other Treatments
+- BG Update Delay
+- Debug Log Level
+- Loading stats...
+- [dynamic] InfoType.allCases.map { $0.name }
+- [dynamic] alert title and message passed to presentSimpleAlert(title:message:)
+- OK
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// SettingsMenuView.swift
+
+import SwiftUI
+import UIKit
+
+struct SettingsMenuView: View {
+    @ObservedObject private var nightscoutURL = Storage.shared.url
+
+    var body: some View {
+        List {
+            ForEach(SettingsRoute.menuSections(nightscoutConfigured: !nightscoutURL.value.isEmpty), id: \.0) { section, routes in
+                Section(section.rawValue) {
+                    ForEach(routes) { route in
+                        NavigationRow(title: route.title,
+                                      icon: route.icon,
+                                      value: route)
+                    }
+                }
+            }
+        }
+        .navigationTitle("Settings")
+        .navigationBarTitleDisplayMode(.large)
+    }
+}
+
+// MARK: – Sheet routing
+
+enum SettingsSection: String, CaseIterable, Hashable {
+    case data = "Data Settings"
+    case display = "Display Settings"
+    case app = "App Settings"
+    case alarms = "Alarms"
+    case integrations = "Integrations"
+    case advanced = "Advanced Settings"
+}
+
+/// A single setting inside a settings screen, exposed to Menu search. Leaves
+/// are not navigable on their own — a search hit opens the screen
+/// (`SettingsRoute`) that contains it.
+struct SettingsLeaf: Hashable {
+    let title: String
+    let keywords: [String]
+
+    init(_ title: String, _ keywords: [String] = []) {
+        self.title = title
+        self.keywords = keywords
+    }
+}
+
+enum SettingsRoute: Hashable, Identifiable {
+    case settings
+    case units
+    case nightscout, dexcom
+    case backgroundRefresh
+    case general, graph
+    case tabSettings
+    case infoDisplay
+    case alarmSettings
+    case apn
+    #if !targetEnvironment(macCatalyst)
+        case liveActivity
+    #endif
+    case remote
+    case importExport
+    case calendar, contact
+    case advanced
+    case aggregatedStats
+
+    var id: Self { self }
+
+    // MARK: – Row presentation (single source of truth)
+
+    /// Title shown in the Settings list and used for search matching.
+    /// Non-row cases (`.settings`, `.aggregatedStats`) return "" and are never
+    /// included in `menuSections`.
+    var title: String {
+        switch self {
+        case .nightscout: return "Nightscout"
+        case .dexcom: return "Dexcom"
+        case .general: return "General"
+        case .graph: return "Graph"
+        case .infoDisplay: return "Information Display"
+        case .units: return "Units and Metrics"
+        case .tabSettings: return "Tabs"
+        case .backgroundRefresh: return "Background Refresh"
+        case .importExport: return "Import/Export"
+        case .apn: return "APN"
+        #if !targetEnvironment(macCatalyst)
+            case .liveActivity: return "Live Activity"
+        #endif
+        case .remote: return "Remote"
+        case .alarmSettings: return "Alarms"
+        case .calendar: return "Calendar"
+        case .contact: return "Contact"
+        case .advanced: return "Advanced"
+        case .settings, .aggregatedStats: return ""
+        }
+    }
+
+    var icon: String {
+        switch self {
+        case .nightscout: return "network"
+        case .dexcom: return "sensor.tag.radiowaves.forward"
+        case .general: return "gearshape"
+        case .graph: return "chart.xyaxis.line"
+        case .infoDisplay: return "info.circle"
+        case .units: return "scalemass"
+        case .tabSettings: return "rectangle.3.group"
+        case .backgroundRefresh: return "arrow.clockwise"
+        case .importExport: return "square.and.arrow.down"
+        case .apn: return "bell.and.waves.left.and.right"
+        #if !targetEnvironment(macCatalyst)
+            case .liveActivity: return "dot.radiowaves.left.and.right"
+        #endif
+        case .remote: return "antenna.radiowaves.left.and.right"
+        case .alarmSettings: return "bell.badge"
+        case .calendar: return "calendar"
+        case .contact: return "person.circle"
+        case .advanced: return "exclamationmark.shield"
+        case .settings, .aggregatedStats: return ""
+        }
+    }
+
+    /// Extra synonyms so search finds a page by related terms, not just its title.
+    var keywords: [String] {
+        switch self {
+        case .graph: return ["chart"]
+        case .units: return ["mmol", "mgdl", "metrics"]
+        case .infoDisplay: return ["info"]
+        case .apn: return ["push", "notification"]
+        #if !targetEnvironment(macCatalyst)
+            case .liveActivity: return ["dynamic island", "lock screen"]
+        #endif
+        case .importExport: return ["import", "export", "backup"]
+        default: return []
+        }
+    }
+
+    /// The individual settings inside this screen, so Menu search can find a
+    /// bottom-level setting (e.g. "Graph Basal") and open the screen containing
+    /// it. Titles mirror the row (or section) titles in each screen's view —
+    /// keep them in sync when adding or renaming rows.
+    var leaves: [SettingsLeaf] {
+        switch self {
+        case .nightscout: return [
+                SettingsLeaf("URL"),
+                SettingsLeaf("Access Token", ["token"]),
+                SettingsLeaf("Enable WebSocket", ["websocket", "real-time"]),
+            ]
+        case .dexcom: return [
+                SettingsLeaf("User Name", ["username"]),
+                SettingsLeaf("Password"),
+                SettingsLeaf("Server"),
+            ]
+        case .general: return [
+                SettingsLeaf("Display App Badge", ["badge"]),
+                SettingsLeaf("Persistent Notification"),
+                SettingsLeaf("Appearance", ["dark mode", "light mode", "theme"]),
+                SettingsLeaf("Display Stats"),
+                SettingsLeaf("Display Small Graph"),
+                SettingsLeaf("Color BG Text"),
+                SettingsLeaf("Keep Screen Active", ["screen lock", "screenlock"]),
+                SettingsLeaf("Show Display Name"),
+                SettingsLeaf("Snoozer emoji"),
+                SettingsLeaf("Force portrait mode", ["orientation", "landscape"]),
+                SettingsLeaf("Time Zone Override", ["timezone"]),
+                SettingsLeaf("Speak BG", ["voice", "speech"]),
+                SettingsLeaf("Send anonymous usage stats", ["telemetry", "diagnostics"]),
+            ]
+        case .graph: return [
+                SettingsLeaf("Display Dots"),
+                SettingsLeaf("Display Lines"),
+                SettingsLeaf("Show DIA Lines", ["dia"]),
+                SettingsLeaf("Show −30 min Line", ["-30"]),
+                SettingsLeaf("Show −90 min Line", ["-90"]),
+                SettingsLeaf("Show Yesterday's BG", ["yesterday"]),
+                SettingsLeaf("Show Midnight Lines"),
+                SettingsLeaf("Show Carb/Bolus Values", ["carbs"]),
+                SettingsLeaf("Show Carb Absorption"),
+                SettingsLeaf("Treatments on Small Graph"),
+                SettingsLeaf("Small Graph Height", ["height"]),
+                SettingsLeaf("Hours of Prediction", ["prediction"]),
+                SettingsLeaf("Prediction Style"),
+                SettingsLeaf("Min Basal", ["basal scale"]),
+                SettingsLeaf("Min BG Scale"),
+                SettingsLeaf("Show Days Back", ["history", "days back"]),
+            ]
+        case .infoDisplay:
+            return [SettingsLeaf("Hide Information Table")]
+                + InfoType.allCases.map { SettingsLeaf($0.name) }
+        case .units: return [
+                SettingsLeaf("Glucose Unit"),
+                SettingsLeaf("Range Mode", ["tir", "titr", "time in range"]),
+                SettingsLeaf("Glycemic Metrics", ["hba1c", "ehba1c", "gmi"]),
+                SettingsLeaf("Variability", ["standard deviation", "cv"]),
+            ]
+        case .backgroundRefresh: return [
+                SettingsLeaf("Background Refresh Type", ["silent tune", "bluetooth", "rileylink", "omnipod", "heartbeat"]),
+            ]
+        case .importExport: return [
+                SettingsLeaf("Scan QR Code to Import Settings", ["qr"]),
+                SettingsLeaf("Export Settings To QR Code", ["qr"]),
+            ]
+        case .apn: return [
+                SettingsLeaf("APNS Key ID", ["apns"]),
+                SettingsLeaf("APNS Key", ["apns", "p8"]),
+            ]
+        #if !targetEnvironment(macCatalyst)
+            case .liveActivity: return [
+                    SettingsLeaf("Enable Live Activity"),
+                    SettingsLeaf("Restart Live Activity"),
+                    SettingsLeaf("Grid Slots", ["carplay", "watch"]),
+                ]
+        #endif
+        case .remote: return [
+                SettingsLeaf("Loop Remote Control"),
+                SettingsLeaf("Trio Remote Control", ["trc"]),
+                SettingsLeaf("Meal with Bolus"),
+                SettingsLeaf("Meal with Fat/Protein"),
+                SettingsLeaf("Guardrails", ["max bolus", "max carbs", "max fat", "max protein"]),
+                SettingsLeaf("Bolus Increment"),
+                SettingsLeaf("Shared Secret"),
+                SettingsLeaf("QR Code URL", ["qr"]),
+            ]
+        case .alarmSettings: return [
+                SettingsLeaf("All Alerts Snoozed", ["snooze all"]),
+                SettingsLeaf("All Sounds Muted", ["mute all"]),
+                SettingsLeaf("Day starts", ["schedule", "day/night"]),
+                SettingsLeaf("Night starts", ["schedule", "day/night"]),
+                SettingsLeaf("Override System Volume", ["volume"]),
+                SettingsLeaf("Audio During Calls"),
+                SettingsLeaf("Ignore Zero BG"),
+                SettingsLeaf("Auto-Snooze CGM Start", ["autosnooze"]),
+                SettingsLeaf("Volume Buttons Snooze Alarms"),
+            ]
+        case .calendar: return [
+                SettingsLeaf("Save BG to Calendar", ["watch", "carplay"]),
+                SettingsLeaf("Calendar Text"),
+            ]
+        case .contact: return [
+                SettingsLeaf("Enable Contact BG Updates", ["watch face"]),
+                SettingsLeaf("Background Color"),
+                SettingsLeaf("Color Mode"),
+                SettingsLeaf("Text Color"),
+                SettingsLeaf("Show Trend"),
+                SettingsLeaf("Show Delta"),
+                SettingsLeaf("Show IOB"),
+            ]
+        case .advanced: return [
+                SettingsLeaf("Download Treatments"),
+                SettingsLeaf("Download Prediction"),
+                SettingsLeaf("Graph Basal"),
+                SettingsLeaf("Graph Bolus"),
+                SettingsLeaf("Graph Carbs"),
+                SettingsLeaf("Graph Other Treatments"),
+                SettingsLeaf("BG Update Delay", ["delay"]),
+                SettingsLeaf("Debug Log Level", ["logging"]),
+            ]
+        case .tabSettings, .settings, .aggregatedStats: return []
+        }
+    }
+
+    /// Ordered, grouped list of the routes shown as rows in the Settings menu.
+    /// Encodes the conditional visibility in one place so both the list and the
+    /// Menu search stay in sync.
+    static func menuSections(nightscoutConfigured: Bool) -> [(SettingsSection, [SettingsRoute])] {
+        var display: [SettingsRoute] = [.general, .graph]
+        if nightscoutConfigured {
+            display.append(.infoDisplay)
+        }
+        display += [.units, .tabSettings]
+
+        var app: [SettingsRoute] = [.backgroundRefresh, .importExport, .apn]
+        #if !targetEnvironment(macCatalyst)
+            app.append(.liveActivity)
+        #endif
+        if nightscoutConfigured {
+            app.append(.remote)
+        }
+
+        return [
+            (.data, [.nightscout, .dexcom]),
+            (.display, display),
+            (.app, app),
+            (.alarms, [.alarmSettings]),
+            (.integrations, [.calendar, .contact]),
+            (.advanced, [.advanced]),
+        ]
+    }
+
+    @ViewBuilder
+    var destination: some View {
+        switch self {
+        case .settings: SettingsMenuView()
+        case .units: UnitsSettingsView()
+        case .nightscout: NightscoutSettingsView(viewModel: .init())
+        case .dexcom: DexcomSettingsView(viewModel: .init())
+        case .backgroundRefresh: BackgroundRefreshSettingsView(viewModel: .init())
+        case .general: GeneralSettingsView()
+        case .graph: GraphSettingsView()
+        case .tabSettings: TabCustomizationModal()
+        case .infoDisplay: InfoDisplaySettingsView(viewModel: .init())
+        case .alarmSettings: AlarmSettingsView()
+        case .apn: APNSettingsView()
+        #if !targetEnvironment(macCatalyst)
+            case .liveActivity: LiveActivitySettingsView()
+        #endif
+        case .remote: RemoteSettingsView(viewModel: .init())
+        case .importExport: ImportExportSettingsView()
+        case .calendar: CalendarSettingsView()
+        case .contact: ContactSettingsView(viewModel: .init())
+        case .advanced: AdvancedSettingsView(viewModel: .init())
+        case .aggregatedStats:
+            AggregatedStatsViewWrapper()
+        }
+    }
+}
+
+// Helper view to access MainViewController
+struct AggregatedStatsViewWrapper: View {
+    @State private var mainViewController: MainViewController?
+
+    var body: some View {
+        Group {
+            if let mainVC = mainViewController {
+                AggregatedStatsContentView(mainViewController: mainVC)
+            } else {
+                Text("Loading stats...")
+                    .onAppear {
+                        mainViewController = getMainViewController()
+                    }
+            }
+        }
+    }
+
+    private func getMainViewController() -> MainViewController? {
+        MainViewController.shared
+    }
+}
+
+// MARK: – UIKit helpers (unchanged)
+
+extension UIApplication {
+    var topMost: UIViewController? {
+        // `keyWindow` is deprecated and returns nil on Mac Catalyst / multi-window iPad.
+        // Walk connected scenes instead and prefer the foreground-active one.
+        let windowScenes = connectedScenes.compactMap { $0 as? UIWindowScene }
+        let activeScene = windowScenes.first { $0.activationState == .foregroundActive }
+            ?? windowScenes.first
+        let rootVC = activeScene?.windows.first(where: \.isKeyWindow)?.rootViewController
+            ?? activeScene?.windows.first?.rootViewController
+        guard var top = rootVC else { return nil }
+        while let presented = top.presentedViewController {
+            top = presented
+        }
+        return top
+    }
+}
+
+extension UIViewController {
+    func presentSimpleAlert(title: String, message: String) {
+        let a = UIAlertController(title: title,
+                                  message: message,
+                                  preferredStyle: .alert)
+        a.addAction(UIAlertAction(title: "OK", style: .default))
+        present(a, animated: true)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/GeneralSettingsView.swift
+UI STRINGS:
+- App Settings
+- Display App Badge
+- Persistent Notification
+- Display
+- Appearance
+- [dynamic] AppearanceMode.displayName
+- Display Stats
+- Display Small Graph
+- Color BG Text
+- Keep Screen Active
+- Show Display Name
+- Snoozer emoji
+- Force portrait mode
+- Time Zone
+- Time Zone Override
+- [dynamic] time zone labels from timeZoneLabel(_:) such as (UTC±HH:MM) Area/City
+- Speak BG
+- Language
+- English
+- French
+- Italian
+- Slovak
+- Swedish
+- Always
+- Low
+- Proactive Low
+- Low BG Limit
+- Fast Drop Delta
+- High
+- High BG Limit
+- Diagnostics
+- Send anonymous usage stats
+- What's sent
+- Privacy
+- General Settings
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// GeneralSettingsView.swift
+
+import SwiftUI
+
+struct GeneralSettingsView: View {
+    @ObservedObject var colorBGText = Storage.shared.colorBGText
+    @ObservedObject var appBadge = Storage.shared.appBadge
+    @ObservedObject var appearanceMode = Storage.shared.appearanceMode
+    @ObservedObject var showStats = Storage.shared.showStats
+    @ObservedObject var showSmallGraph = Storage.shared.showSmallGraph
+    @ObservedObject var screenlockSwitchState = Storage.shared.screenlockSwitchState
+    @ObservedObject var showDisplayName = Storage.shared.showDisplayName
+    @ObservedObject var snoozerEmoji = Storage.shared.snoozerEmoji
+    @ObservedObject var forcePortraitMode = Storage.shared.forcePortraitMode
+    @ObservedObject var persistentNotification = Storage.shared.persistentNotification
+    @ObservedObject var graphTimeZoneEnabled = Storage.shared.graphTimeZoneEnabled
+    @ObservedObject var graphTimeZoneIdentifier = Storage.shared.graphTimeZoneIdentifier
+
+    // Speak-BG settings
+    @ObservedObject var speakBG = Storage.shared.speakBG
+    @ObservedObject var speakBGAlways = Storage.shared.speakBGAlways
+    @ObservedObject var speakLanguage = Storage.shared.speakLanguage
+    @ObservedObject var speakLowBG = Storage.shared.speakLowBG
+    @ObservedObject var speakProactiveLowBG = Storage.shared.speakProactiveLowBG
+    @ObservedObject var speakLowBGLimit = Storage.shared.speakLowBGLimit
+    @ObservedObject var speakFastDropDelta = Storage.shared.speakFastDropDelta
+    @ObservedObject var speakHighBG = Storage.shared.speakHighBG
+    @ObservedObject var speakHighBGLimit = Storage.shared.speakHighBGLimit
+
+    // Telemetry — see LoopFollow/Helpers/Telemetry.swift
+    @ObservedObject var telemetryEnabled = Storage.shared.telemetryEnabled
+
+    var body: some View {
+        Form {
+            Section("App Settings") {
+                Toggle("Display App Badge", isOn: $appBadge.value)
+                Toggle("Persistent Notification", isOn: $persistentNotification.value)
+            }
+
+            Section("Display") {
+                Picker("Appearance", selection: $appearanceMode.value) {
+                    ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                        Text(mode.displayName).tag(mode)
+                    }
+                }
+                Toggle("Display Stats", isOn: $showStats.value)
+                Toggle("Display Small Graph", isOn: $showSmallGraph.value)
+                Toggle("Color BG Text", isOn: $colorBGText.value)
+                Toggle("Keep Screen Active", isOn: $screenlockSwitchState.value)
+                Toggle("Show Display Name", isOn: $showDisplayName.value)
+                Toggle("Snoozer emoji", isOn: $snoozerEmoji.value)
+                Toggle("Force portrait mode", isOn: $forcePortraitMode.value)
+                    .onChange(of: forcePortraitMode.value) { _ in
+                        let window = UIApplication.shared.connectedScenes
+                            .compactMap { $0 as? UIWindowScene }
+                            .flatMap { $0.windows }
+                            .first
+
+                        window?.rootViewController?.setNeedsUpdateOfSupportedInterfaceOrientations()
+                    }
+            }
+
+            Section("Time Zone") {
+                Toggle("Time Zone Override", isOn: $graphTimeZoneEnabled.value)
+                    .onChange(of: graphTimeZoneEnabled.value) { _ in markChartSettingsDirty() }
+
+                if graphTimeZoneEnabled.value {
+                    Picker("Time Zone", selection: $graphTimeZoneIdentifier.value) {
+                        ForEach(Self.sortedTimeZones, id: \.identifier) { tz in
+                            Text(Self.timeZoneLabel(tz)).tag(tz.identifier)
+                        }
+                    }
+                    .onChange(of: graphTimeZoneIdentifier.value) { _ in markChartSettingsDirty() }
+                }
+            }
+
+            Section("Speak BG") {
+                Toggle("Speak BG", isOn: $speakBG.value.animation())
+
+                if speakBG.value {
+                    Picker("Language", selection: $speakLanguage.value) {
+                        Text("English").tag("en")
+                        Text("French").tag("fr")
+                        Text("Italian").tag("it")
+                        Text("Slovak").tag("sk")
+                        Text("Swedish").tag("sv")
+                    }
+
+                    Toggle("Always", isOn: $speakBGAlways.value.animation())
+
+                    if !speakBGAlways.value {
+                        Toggle("Low", isOn: $speakLowBG.value.animation())
+                            .onChange(of: speakLowBG.value) { newValue in
+                                if newValue {
+                                    speakProactiveLowBG.value = false
+                                }
+                            }
+
+                        Toggle("Proactive Low", isOn: $speakProactiveLowBG.value.animation())
+                            .onChange(of: speakProactiveLowBG.value) { newValue in
+                                if newValue {
+                                    speakLowBG.value = false
+                                }
+                            }
+
+                        if speakLowBG.value || speakProactiveLowBG.value {
+                            BGPicker(
+                                title: "Low BG Limit",
+                                range: 40 ... 108,
+                                value: $speakLowBGLimit.value
+                            )
+                        }
+
+                        if speakProactiveLowBG.value {
+                            BGPicker(
+                                title: "Fast Drop Delta",
+                                range: 3 ... 20,
+                                value: $speakFastDropDelta.value
+                            )
+                        }
+
+                        Toggle("High", isOn: $speakHighBG.value.animation())
+
+                        if speakHighBG.value {
+                            BGPicker(
+                                title: "High BG Limit",
+                                range: 140 ... 300,
+                                value: $speakHighBGLimit.value
+                            )
+                        }
+                    }
+                }
+            }
+
+            Section("Diagnostics") {
+                Toggle("Send anonymous usage stats", isOn: $telemetryEnabled.value)
+                    .onChange(of: telemetryEnabled.value) { newValue in
+                        if newValue {
+                            TelemetryClient.shared.scheduleRecurring()
+                        }
+                    }
+                NavigationLink("What's sent") { TelemetryPreviewView() }
+                NavigationLink("Privacy") { TelemetryPrivacyView() }
+            }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("General Settings", displayMode: .inline)
+    }
+
+    private func markChartSettingsDirty() {
+        Observable.shared.chartSettingsChanged.value = true
+    }
+
+    private static let sortedTimeZones: [TimeZone] = TimeZone.knownTimeZoneIdentifiers
+        .compactMap { TimeZone(identifier: $0) }
+        .sorted { $0.secondsFromGMT() < $1.secondsFromGMT() }
+
+    private static func timeZoneLabel(_ tz: TimeZone) -> String {
+        let offsetMinutes = tz.secondsFromGMT() / 60
+        let sign = offsetMinutes >= 0 ? "+" : "-"
+        let offsetString = String(format: "UTC%@%02d:%02d", sign, abs(offsetMinutes) / 60, abs(offsetMinutes) % 60)
+        return "(\(offsetString)) \(tz.identifier)"
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/HomeContentView.swift
+UI STRINGS:
+- Home
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// HomeContentView.swift
+
+import SwiftUI
+import UIKit
+
+/// A SwiftUI wrapper around MainViewController that displays the full Home screen.
+/// This can be used both in the tab bar and as a modal from the Menu.
+struct HomeContentView: View {
+    let isModal: Bool
+
+    init(isModal: Bool = false) {
+        self.isModal = isModal
+    }
+
+    var body: some View {
+        MainViewControllerRepresentable()
+            // Home has no text input, yet iOS sometimes replays a stale keyboard
+            // frame when the app returns to the foreground, which squeezes the
+            // whole screen up by a keyboard's height until a rotation forces the
+            // safe area to recompute. Opting out of keyboard avoidance prevents it.
+            .ignoresSafeArea(.keyboard)
+    }
+}
+
+private struct MainViewControllerRepresentable: UIViewControllerRepresentable {
+    func makeUIViewController(context _: Context) -> UIViewController {
+        // Reuse the single long-lived instance rather than creating a new one,
+        // so there is exactly one data pipeline and MainViewController.shared is
+        // never displaced. bootstrap() is a no-op if it already exists.
+        MainViewController.bootstrap()
+        let mainVC = MainViewController.shared!
+        // Detach from any previous SwiftUI host (e.g. after a Menu push was
+        // popped and is now being re-pushed) before this representable embeds it.
+        mainVC.willMove(toParent: nil)
+        mainVC.removeFromParent()
+        mainVC.view.removeFromSuperview()
+        mainVC.overrideUserInterfaceStyle = Storage.shared.appearanceMode.value.userInterfaceStyle
+        return mainVC
+    }
+
+    func updateUIViewController(_ uiViewController: UIViewController, context _: Context) {
+        uiViewController.overrideUserInterfaceStyle = Storage.shared.appearanceMode.value.userInterfaceStyle
+    }
+}
+
+// MARK: - Modal wrapper with navigation bar
+
+struct HomeModalView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        NavigationStack {
+            HomeContentView(isModal: true)
+                .navigationTitle("Home")
+                .navigationBarTitleDisplayMode(.inline)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image(systemName: "xmark")
+                        }
+                    }
+                }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+    }
+}
+
+// MARK: - Preview
+
+#Preview {
+    HomeModalView()
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/GraphSettingsView.swift
+UI STRINGS:
+- Graph Display
+- Display Dots
+- Display Lines
+- Show DIA Lines
+- Show −30 min Line
+- Show −90 min Line
+- Show Yesterday's BG
+- Show Midnight Lines
+- Treatments
+- Show Carb/Bolus Values
+- Show Carb Absorption
+- Treatments on Small Graph
+- Small Graph
+- Height
+- Prediction
+- Hours of Prediction
+- Prediction Style
+- [dynamic] PredictionDisplayType.displayName
+- Basal / BG Scale
+- Min Basal
+- Min BG Scale
+- History
+- Show Days Back
+- Graph Settings
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// GraphSettingsView.swift
+
+import SwiftUI
+
+struct GraphSettingsView: View {
+    @ObservedObject private var showDots = Storage.shared.showDots
+    @ObservedObject private var showLines = Storage.shared.showLines
+    @ObservedObject private var showValues = Storage.shared.showValues
+    @ObservedObject private var showAbsorption = Storage.shared.showAbsorption
+    @ObservedObject private var showDIALines = Storage.shared.showDIALines
+    @ObservedObject private var show30MinLine = Storage.shared.show30MinLine
+    @ObservedObject private var show90MinLine = Storage.shared.show90MinLine
+    @ObservedObject private var showMidnightLines = Storage.shared.showMidnightLines
+    @ObservedObject private var showYesterdayLine = Storage.shared.showYesterdayLine
+    @ObservedObject private var smallGraphTreatments = Storage.shared.smallGraphTreatments
+
+    @ObservedObject private var smallGraphHeight = Storage.shared.smallGraphHeight
+    @ObservedObject private var predictionToLoad = Storage.shared.predictionToLoad
+    @ObservedObject private var predictionDisplayType = Storage.shared.predictionDisplayType
+    @ObservedObject private var minBasalScale = Storage.shared.minBasalScale
+    @ObservedObject private var minBGScale = Storage.shared.minBGScale
+    @ObservedObject private var downloadDays = Storage.shared.downloadDays
+
+    private var nightscoutEnabled: Bool { IsNightscoutEnabled() }
+
+    var body: some View {
+        Form {
+            // ── Graph Display ────────────────────────────────────────────
+            Section("Graph Display") {
+                Toggle("Display Dots", isOn: $showDots.value)
+                    .onChange(of: showDots.value) { _ in markDirty() }
+
+                Toggle("Display Lines", isOn: $showLines.value)
+                    .onChange(of: showLines.value) { _ in markDirty() }
+
+                if nightscoutEnabled {
+                    Toggle("Show DIA Lines", isOn: $showDIALines.value)
+                        .onChange(of: showDIALines.value) { _ in markDirty() }
+
+                    Toggle("Show −30 min Line", isOn: $show30MinLine.value)
+                        .onChange(of: show30MinLine.value) { _ in markDirty() }
+
+                    Toggle("Show −90 min Line", isOn: $show90MinLine.value)
+                        .onChange(of: show90MinLine.value) { _ in markDirty() }
+
+                    Toggle("Show Yesterday's BG", isOn: $showYesterdayLine.value)
+                        .onChange(of: showYesterdayLine.value) { _ in markDirty() }
+                }
+
+                Toggle("Show Midnight Lines", isOn: $showMidnightLines.value)
+                    .onChange(of: showMidnightLines.value) { _ in markDirty() }
+            }
+
+            // ── Treatments ───────────────────────────────────────────────
+            if nightscoutEnabled {
+                Section("Treatments") {
+                    Toggle("Show Carb/Bolus Values", isOn: $showValues.value)
+                        .onChange(of: showValues.value) { _ in markDirty() }
+                    Toggle("Show Carb Absorption", isOn: $showAbsorption.value)
+                        .onChange(of: showAbsorption.value) { _ in markDirty() }
+                    Toggle("Treatments on Small Graph",
+                           isOn: $smallGraphTreatments.value)
+                        .onChange(of: smallGraphTreatments.value) { _ in markDirty() }
+                }
+            }
+
+            // ── Small Graph ──────────────────────────────────────────────
+            Section("Small Graph") {
+                SettingsStepperRow(
+                    title: "Height",
+                    range: 40 ... 80,
+                    step: 5,
+                    value: $smallGraphHeight.value,
+                    format: { "\(Int($0)) pt" }
+                )
+                .onChange(of: smallGraphHeight.value) { _ in markDirty() }
+            }
+
+            // ── Prediction ───────────────────────────────────────────────
+            if nightscoutEnabled {
+                Section("Prediction") {
+                    SettingsStepperRow(
+                        title: "Hours of Prediction",
+                        range: 0 ... 6,
+                        step: 0.25,
+                        value: $predictionToLoad.value,
+                        format: { "\($0.localized(maxFractionDigits: 2)) h" }
+                    )
+
+                    if Storage.shared.device.value != "Loop" {
+                        Picker("Prediction Style", selection: $predictionDisplayType.value) {
+                            ForEach(PredictionDisplayType.allCases, id: \.self) { type in
+                                Text(type.displayName).tag(type)
+                            }
+                        }
+                        .onChange(of: predictionDisplayType.value) { _ in markDirty() }
+                    }
+                }
+            }
+
+            // ── Basal / BG scale ─────────────────────────────────────────
+            if nightscoutEnabled {
+                Section("Basal / BG Scale") {
+                    SettingsStepperRow(
+                        title: "Min Basal",
+                        range: 0.5 ... 20,
+                        step: 0.5,
+                        value: $minBasalScale.value,
+                        format: { "\($0.localized(maxFractionDigits: 1)) U/h" }
+                    )
+
+                    BGPicker(
+                        title: "Min BG Scale",
+                        range: 40 ... 400,
+                        value: $minBGScale.value
+                    )
+                    .onChange(of: minBGScale.value) { _ in markDirty() }
+                }
+            }
+
+            // ── History window ───────────────────────────────────────────
+            if nightscoutEnabled {
+                Section("History") {
+                    SettingsStepperRow(
+                        title: "Show Days Back",
+                        range: 1 ... 4,
+                        step: 1,
+                        value: $downloadDays.value,
+                        format: { "\(Int($0)) d" }
+                    )
+                }
+            }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("Graph Settings", displayMode: .inline)
+    }
+
+    /// Marks the chart as needing a redraw
+    private func markDirty() {
+        Observable.shared.chartSettingsChanged.value = true
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/UnitsSettingsView.swift
+UI STRINGS:
+- Units and Metrics
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// UnitsSettingsView.swift
+
+import SwiftUI
+
+struct UnitsSettingsView: View {
+    var body: some View {
+        Form {
+            UnitsConfigurationView()
+        }
+        .navigationTitle("Units and Metrics")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/UnitsConfigurationView.swift
+UI STRINGS:
+- Glucose
+- Glucose Unit
+- mg/dL
+- mmol/L
+- Range Mode
+- TIR
+- TITR
+- Custom
+- Low
+- High
+- Range
+- TIR — Time in Range, the share of readings within …
+- TITR — Time in Tight Range, within …
+- Custom — set your own low and high.
+- Metric
+- eHbA1c
+- GMI
+- Output Unit
+- %
+- mmol/mol
+- Glycemic Metrics
+- eHbA1c — an A1c estimate from your average glucose. GMI — Glucose Management Indicator, another A1c estimate from average glucose. % and mmol/mol (IFCC) are two scales for the result.
+- Metric
+- Std Dev
+- CV
+- Variability
+- Std Dev — Standard Deviation, how much glucose swings around the average. CV — Coefficient of Variation, that swing relative to the average (Std Dev ÷ mean).
+- Set Up Units
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// UnitsConfigurationView.swift
+
+import SwiftUI
+
+/// Reusable view for configuring units and metrics.
+/// Can be embedded in Forms or used standalone during onboarding.
+///
+/// Onboarding splits this into two lighter pages — the glucose unit on its own,
+/// and the LoopFollow statistics (range, glycemic, variability) on a second page
+/// — by rendering a subset of the sections via `sections`. Settings shows them
+/// all together (the default).
+struct UnitsConfigurationView: View {
+    /// Which groups of sections to render. Onboarding uses `.units` and
+    /// `.statistics` on separate pages; everywhere else uses `.all`.
+    struct Sections: OptionSet {
+        let rawValue: Int
+        /// Glucose display unit (mg/dL vs mmol/L).
+        static let units = Sections(rawValue: 1 << 0)
+        /// Range mode plus the glycemic and variability metrics.
+        static let statistics = Sections(rawValue: 1 << 1)
+        static let all: Sections = [.units, .statistics]
+    }
+
+    var sections: Sections = .all
+
+    @State private var rangeMode = UnitSettingsStore.shared.timeInRangeMode
+    @State private var glucoseUnit = UnitSettingsStore.shared.glucoseUnit
+    @State private var lowValue = Storage.shared.lowLine.value
+    @State private var highValue = Storage.shared.highLine.value
+
+    /// Formats a mg/dL threshold pair in the currently selected glucose unit,
+    /// e.g. "70–180 mg/dL" or "3.9–10.0 mmol/L".
+    private func rangeBounds(_ lowMgdl: Double, _ highMgdl: Double) -> String {
+        let factor = glucoseUnit == .mmolL ? GlucoseConversion.mgDlToMmolL : 1.0
+        let digits = glucoseUnit.fractionDigits
+        let low = Localizer.formatToLocalizedString(lowMgdl * factor, maxFractionDigits: digits, minFractionDigits: digits)
+        let high = Localizer.formatToLocalizedString(highMgdl * factor, maxFractionDigits: digits, minFractionDigits: digits)
+        return "\(low)–\(high) \(glucoseUnit.rawValue)"
+    }
+
+    var body: some View {
+        Group {
+            if sections.contains(.units) {
+                unitsSections
+            }
+            if sections.contains(.statistics) {
+                statisticsSections
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var unitsSections: some View {
+        Section("Glucose") {
+            Picker("Glucose Unit", selection: $glucoseUnit) {
+                Text("mg/dL").tag(GlucoseDisplayUnit.mgdL)
+                Text("mmol/L").tag(GlucoseDisplayUnit.mmolL)
+            }
+            .pickerStyle(.segmented)
+            .onChange(of: glucoseUnit) { newValue in
+                UnitSettingsStore.shared.glucoseUnit = newValue
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var statisticsSections: some View {
+        Group {
+            Section {
+                Picker("Range Mode", selection: $rangeMode) {
+                    Text("TIR").tag(TimeInRangeDisplayMode.tir)
+                    Text("TITR").tag(TimeInRangeDisplayMode.titr)
+                    Text("Custom").tag(TimeInRangeDisplayMode.custom)
+                }
+                .pickerStyle(.segmented)
+                .onChange(of: rangeMode) { newValue in
+                    UnitSettingsStore.shared.timeInRangeMode = newValue
+                    Observable.shared.chartSettingsChanged.value = true
+                }
+
+                if rangeMode == .custom {
+                    BGPicker(
+                        title: "Low",
+                        range: 40 ... 120,
+                        value: $lowValue
+                    )
+                    .id(glucoseUnit)
+                    .onChange(of: lowValue) { newValue in
+                        Storage.shared.lowLine.value = newValue
+                        Observable.shared.chartSettingsChanged.value = true
+                    }
+                    BGPicker(
+                        title: "High",
+                        range: 120 ... 400,
+                        value: $highValue
+                    )
+                    .id(glucoseUnit)
+                    .onChange(of: highValue) { newValue in
+                        Storage.shared.highLine.value = newValue
+                        Observable.shared.chartSettingsChanged.value = true
+                    }
+                }
+            } header: {
+                Text("Range")
+            } footer: {
+                Text("TIR — Time in Range, the share of readings within \(rangeBounds(70, 180)).\nTITR — Time in Tight Range, within \(rangeBounds(70, 140)).\nCustom — set your own low and high.")
+            }
+
+            Section {
+                Picker("Metric", selection: Binding(
+                    get: { UnitSettingsStore.shared.glycemicMetricMode },
+                    set: { UnitSettingsStore.shared.glycemicMetricMode = $0 }
+                )) {
+                    Text("eHbA1c").tag(GlycemicMetricMode.ehba1c)
+                    Text("GMI").tag(GlycemicMetricMode.gmi)
+                }
+                .pickerStyle(.segmented)
+
+                Picker("Output Unit", selection: Binding(
+                    get: { UnitSettingsStore.shared.glycemicOutputUnit },
+                    set: { UnitSettingsStore.shared.glycemicOutputUnit = $0 }
+                )) {
+                    Text("%").tag(GlycemicOutputUnit.percent)
+                    Text("mmol/mol").tag(GlycemicOutputUnit.mmolMol)
+                }
+                .pickerStyle(.segmented)
+            } header: {
+                Text("Glycemic Metrics")
+            } footer: {
+                Text("eHbA1c — an A1c estimate from your average glucose. GMI — Glucose Management Indicator, another A1c estimate from average glucose. % and mmol/mol (IFCC) are two scales for the result.")
+            }
+
+            Section {
+                Picker("Metric", selection: Binding(
+                    get: { UnitSettingsStore.shared.variabilityMetricMode },
+                    set: { UnitSettingsStore.shared.variabilityMetricMode = $0 }
+                )) {
+                    Text("Std Dev").tag(VariabilityMetricMode.stdDeviation)
+                    Text("CV").tag(VariabilityMetricMode.cv)
+                }
+                .pickerStyle(.segmented)
+            } header: {
+                Text("Variability")
+            } footer: {
+                Text("Std Dev — Standard Deviation, how much glucose swings around the average. CV — Coefficient of Variation, that swing relative to the average (Std Dev ÷ mean).")
+            }
+        }
+    }
+}
+
+/// Standalone page for units configuration during onboarding.
+/// Shows a checkmark button in the toolbar to complete setup.
+struct UnitsOnboardingView: View {
+    let onComplete: () -> Void
+
+    var body: some View {
+        Form {
+            UnitsConfigurationView()
+        }
+        .navigationTitle("Set Up Units")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    Storage.shared.hasConfiguredUnits.value = true
+                    onComplete()
+                }) {
+                    Image(systemName: "checkmark")
+                        .fontWeight(.semibold)
+                }
+            }
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/CalendarSettingsView.swift
+UI STRINGS:
+- Save BG to Calendar
+- Add the Apple-Calendar complication to your watch or CarPlay to see BG readings. Create a separate calendar (e.g. “Follow”) — this view will delete events on the same calendar each time it writes new readings.
+- Calendar access denied
+- Calendar
+- Calendar Text
+- Line 1
+- Line 2
+- Available Variables
+- %BG% : Blood-glucose reading
+- %DIRECTION% : Dexcom trend arrow
+- %DELTA% : Difference from last reading
+- %IOB% : Insulin-on-Board
+- %COB% : Carbs-on-Board
+- %BASAL% : Current basal U/h
+- %LOOP% : Loop status symbol
+- %OVERRIDE% : Active override %
+- %MINAGO% : Minutes since last reading
+- Calendar
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// CalendarSettingsView.swift
+
+import EventKit
+import SwiftUI
+
+struct CalendarSettingsView: View {
+    // MARK: Storage bindings
+
+    @ObservedObject private var writeCalendarEvent = Storage.shared.writeCalendarEvent
+    @ObservedObject private var calendarIdentifier = Storage.shared.calendarIdentifier
+    @ObservedObject private var watchLine1 = Storage.shared.watchLine1
+    @ObservedObject private var watchLine2 = Storage.shared.watchLine2
+
+    // MARK: Local state
+
+    @State private var calendars: [EKCalendar] = []
+    @State private var accessDenied = false
+
+    // MARK: Body
+
+    var body: some View {
+        Form {
+            // ------------- Calendar write -------------
+            Section {
+                Toggle("Save BG to Calendar",
+                       isOn: $writeCalendarEvent.value)
+                    .disabled(accessDenied) // prevent use when no access
+            } footer: {
+                Text("""
+                Add the Apple-Calendar complication to your watch or CarPlay \
+                to see BG readings. Create a separate calendar (e.g. “Follow”) \
+                — this view will **delete** events on the same calendar each time \
+                it writes new readings.
+                """)
+            }
+
+            // ------------- Access / calendar picker -------------
+            if accessDenied {
+                Text("Calendar access denied")
+                    .foregroundColor(.red)
+            } else {
+                if !calendars.isEmpty {
+                    Picker("Calendar",
+                           selection: $calendarIdentifier.value)
+                    {
+                        ForEach(calendars, id: \.calendarIdentifier) { cal in
+                            Text(cal.title).tag(cal.calendarIdentifier)
+                        }
+                    }
+                }
+            }
+
+            // ------------- Template lines -------------
+            Section("Calendar Text") {
+                TextField("Line 1", text: $watchLine1.value)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+
+                TextField("Line 2", text: $watchLine2.value)
+                    .textInputAutocapitalization(.never)
+                    .disableAutocorrection(true)
+            }
+
+            // ------------- Variable cheat-sheet -------------
+            Section("Available Variables") {
+                ForEach(variableDescriptions, id: \.self) { desc in
+                    Text(desc)
+                }
+            }
+        }
+        .task { // runs once on appear
+            await requestCalendarAccessAndLoad()
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("Calendar", displayMode: .inline)
+    }
+
+    // MARK: - Helpers
+
+    /// Returns array of “%TOKEN% : Explanation” strings used in the cheat-sheet.
+    private var variableDescriptions: [String] {
+        [
+            "%BG% : Blood-glucose reading",
+            "%DIRECTION% : Dexcom trend arrow",
+            "%DELTA% : Difference from last reading",
+            "%IOB% : Insulin-on-Board",
+            "%COB% : Carbs-on-Board",
+            "%BASAL% : Current basal U/h",
+            "%LOOP% : Loop status symbol",
+            "%OVERRIDE% : Active override %",
+            "%MINAGO% : Minutes since last reading",
+        ]
+    }
+
+    /// Ask for calendar permission, then pull the user’s calendars.
+    private func requestCalendarAccessAndLoad() async {
+        let store = EKEventStore()
+        do {
+            try await store.requestAccess(to: .event)
+            accessDenied = false
+            calendars = store.calendars(for: .event)
+                .sorted { $0.title.localizedCaseInsensitiveCompare($1.title) == .orderedAscending }
+        } catch {
+            accessDenied = true
+        }
+
+        // If the previously-saved calendar no longer exists, blank it out
+        if !calendarIdentifier.value.isEmpty,
+           !calendars.contains(where: { $0.calendarIdentifier == calendarIdentifier.value })
+        {
+            calendarIdentifier.value = ""
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/APNSettingsView.swift
+UI STRINGS:
+- LoopFollow APNs Credentials
+- APNS Key ID
+- Enter APNS Key ID
+- Valid Key ID
+- Invalid Key ID
+- Key ID must be exactly 10 uppercase letters or digits.
+- APNS Key
+- Valid APNs key
+- Invalid APNs key
+- Paste APNS Key
+- Paste the full .p8 contents — must include the BEGIN PRIVATE KEY and END PRIVATE KEY lines.
+- APN
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// APNSettingsView.swift
+
+import SwiftUI
+
+struct APNSettingsView: View {
+    @State private var keyId: String = Storage.shared.lfKeyId.value
+    @State private var apnsKey: String = Storage.shared.lfApnsKey.value
+
+    private var keyIdValid: Bool {
+        APNsCredentialValidator.isValidKeyId(keyId)
+    }
+
+    private var apnsKeyValid: Bool {
+        APNsCredentialValidator.isValidApnsKey(apnsKey)
+    }
+
+    var body: some View {
+        Form {
+            Section(header: Text("LoopFollow APNs Credentials")) {
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("APNS Key ID")
+                        TogglableSecureInput(
+                            placeholder: "Enter APNS Key ID",
+                            text: $keyId,
+                            style: .singleLine
+                        )
+                        if !keyId.isEmpty {
+                            Image(systemName: keyIdValid ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                .foregroundColor(keyIdValid ? .green : .orange)
+                                .accessibilityLabel(keyIdValid ? "Valid Key ID" : "Invalid Key ID")
+                        }
+                    }
+                    if !keyId.isEmpty, !keyIdValid {
+                        Text("Key ID must be exactly 10 uppercase letters or digits.")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+
+                VStack(alignment: .leading, spacing: 4) {
+                    HStack {
+                        Text("APNS Key")
+                        Spacer()
+                        if !apnsKey.isEmpty {
+                            Image(systemName: apnsKeyValid ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                .foregroundColor(apnsKeyValid ? .green : .orange)
+                                .accessibilityLabel(apnsKeyValid ? "Valid APNs key" : "Invalid APNs key")
+                        }
+                    }
+                    TogglableSecureInput(
+                        placeholder: "Paste APNS Key",
+                        text: $apnsKey,
+                        style: .multiLine
+                    )
+                    .frame(minHeight: 110)
+                    if !apnsKey.isEmpty, !apnsKeyValid {
+                        Text("Paste the full .p8 contents — must include the BEGIN PRIVATE KEY and END PRIVATE KEY lines.")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                    }
+                }
+            }
+        }
+        .onChange(of: keyId) { newValue in
+            Storage.shared.lfKeyId.value = newValue
+        }
+        .onChange(of: apnsKey) { newValue in
+            let apnsService = LoopAPNSService()
+            let normalized = apnsService.validateAndFixAPNSKey(newValue)
+            Storage.shared.lfApnsKey.value = normalized
+            // Reflect normalization (whitespace fixes etc.) in the field so the
+            // green badge appears when paste added stray whitespace around an
+            // otherwise-valid key.
+            if normalized != newValue {
+                apnsKey = normalized
+            }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationTitle("APN")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/AdvancedSettingsView.swift
+UI STRINGS:
+- Advanced Settings
+- Download Treatments
+- Download Prediction
+- Graph Basal
+- Graph Bolus
+- Graph Carbs
+- Graph Other Treatments
+- BG Update Delay (Sec): [dynamic number]
+- Logging Options
+- Debug Log Level
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// AdvancedSettingsView.swift
+
+import SwiftUI
+
+struct AdvancedSettingsView: View {
+    @ObservedObject var viewModel: AdvancedSettingsViewModel
+
+    var body: some View {
+        Form {
+            Section(header: Text("Advanced Settings")) {
+                Toggle("Download Treatments", isOn: $viewModel.downloadTreatments)
+                Toggle("Download Prediction", isOn: $viewModel.downloadPrediction)
+                Toggle("Graph Basal", isOn: $viewModel.graphBasal)
+                Toggle("Graph Bolus", isOn: $viewModel.graphBolus)
+                Toggle("Graph Carbs", isOn: $viewModel.graphCarbs)
+                Toggle("Graph Other Treatments", isOn: $viewModel.graphOtherTreatments)
+
+                Stepper(value: $viewModel.bgUpdateDelay, in: 1 ... 30, step: 1) {
+                    Text("BG Update Delay (Sec): \(viewModel.bgUpdateDelay)")
+                }
+            }
+
+            Section(header: Text("Logging Options")) {
+                Toggle("Debug Log Level", isOn: $viewModel.debugLogLevel)
+            }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("Advanced Settings", displayMode: .inline)
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/DexcomSettingsView.swift
+UI STRINGS:
+- Dexcom Settings
+- Username
+- Enter Username
+- Password
+- Enter Password
+- Server
+- US
+- Outside US
+- Continue
+- Import Settings
+- Import Settings from QR Code
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// DexcomSettingsView.swift
+
+import SwiftUI
+
+struct DexcomSettingsView: View {
+    @ObservedObject var viewModel: DexcomSettingsViewModel
+    var usesModalCloseButton: Bool = false
+    var onContinueToUnits: (() -> Void)? = nil
+    @State private var showUnitsSetup = false
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        Form {
+            Section(header: Text("Dexcom Settings")) {
+                HStack {
+                    Text("Username")
+                    TextField("Enter Username", text: $viewModel.userName)
+                        .textContentType(.username)
+                        .autocapitalization(.none)
+                        .disableAutocorrection(true)
+                        .multilineTextAlignment(.trailing)
+                }
+
+                HStack {
+                    Text("Password")
+                    TogglableSecureInput(
+                        placeholder: "Enter Password",
+                        text: $viewModel.password,
+                        style: .singleLine,
+                        textContentType: .password
+                    )
+                }
+
+                Picker("Server", selection: $viewModel.server) {
+                    Text("US").tag("US")
+                    Text("Outside US").tag("NON-US")
+                }
+                .pickerStyle(SegmentedPickerStyle())
+            }
+
+            if viewModel.isFreshSetup {
+                Section {
+                    Button(action: {
+                        if let onContinueToUnits {
+                            onContinueToUnits()
+                        } else {
+                            showUnitsSetup = true
+                        }
+                    }) {
+                        HStack {
+                            Spacer()
+                            Text("Continue")
+                                .fontWeight(.semibold)
+                            Spacer()
+                        }
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .disabled(!viewModel.hasCredentials)
+                    .listRowBackground(Color.clear)
+                }
+            }
+
+            importSection
+        }
+        .navigationDestination(isPresented: $showUnitsSetup) {
+            UnitsOnboardingView {
+                dismiss()
+            }
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("Dexcom Settings", displayMode: .inline)
+        .navigationBarBackButtonHidden(usesModalCloseButton)
+    }
+
+    private var importSection: some View {
+        Section(header: Text("Import Settings")) {
+            NavigationLink(destination: ImportExportSettingsView()) {
+                HStack {
+                    Image(systemName: "square.and.arrow.down")
+                        .foregroundColor(.blue)
+                    Text("Import Settings from QR Code")
+                }
+            }
+        }
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/ContactSettingsView.swift
+UI STRINGS:
+- Contact Integration
+- Add the contact named '<contactName>' to your watch face to show the current BG value in real time. Make sure to give the app full access to Contacts when prompted.
+- Enable Contact BG Updates
+- Color Options
+- Select the colors for your BG values. Note: not all watch faces allow control over colors. Recommend options like Activity or Modular Duo if you want to customize colors.
+- Background Color
+- [dynamic] ContactColorOption.allCases rawValue.capitalized
+- Color Mode
+- [dynamic] ContactColorMode.displayName
+- Text Color
+- Dynamic mode colors text based on BG range: Green (in range), Yellow (high), Red (low)
+- Additional Information
+- To see your trend, delta, or IOB, include them in another contact or create separate contacts. When using 'Include', select which contact to add the value to.
+- Trend
+- Show Trend
+- [dynamic] ContactIncludeOption.allCases rawValue
+- Include Trend in
+- [dynamic] availableTargets(for: .Trend).rawValue
+- Delta
+- Show Delta
+- Include Delta in
+- [dynamic] availableTargets(for: .Delta).rawValue
+- IOB
+- Show IOB
+- Include IOB in
+- [dynamic] availableTargets(for: .IOB).rawValue
+- OK
+- Contact
+- Access Denied
+- Please allow access to Contacts in Settings to enable this feature.
+- Access to Contacts is denied. Please go to Settings and enable Contacts access.
+- Access Restricted
+- Access to Contacts is restricted.
+- Error
+- An unknown error occurred while checking Contacts access.
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// ContactSettingsView.swift
+
+import Contacts
+import SwiftUI
+
+struct ContactSettingsView: View {
+    @ObservedObject var viewModel: ContactSettingsViewModel
+
+    @State private var showAlert: Bool = false
+    @State private var alertTitle: String = ""
+    @State private var alertMessage: String = ""
+
+    var body: some View {
+        Form {
+            Section(header: Text("Contact Integration")) {
+                Text("Add the contact named '\(viewModel.contactName)' to your watch face to show the current BG value in real time. Make sure to give the app full access to Contacts when prompted.")
+                    .font(.footnote)
+                    .foregroundColor(.secondary)
+                    .padding(.vertical, 4)
+
+                Toggle("Enable Contact BG Updates", isOn: $viewModel.contactEnabled)
+                    .toggleStyle(SwitchToggleStyle())
+                    .onChange(of: viewModel.contactEnabled) { isEnabled in
+                        if isEnabled {
+                            requestContactAccess()
+                        }
+                    }
+            }
+
+            if viewModel.contactEnabled {
+                Section(header: Text("Color Options")) {
+                    Text("Select the colors for your BG values. Note: not all watch faces allow control over colors. Recommend options like Activity or Modular Duo if you want to customize colors.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 4)
+
+                    Picker("Background Color", selection: $viewModel.contactBackgroundColor) {
+                        ForEach(ContactColorOption.allCases, id: \.rawValue) { option in
+                            Text(option.rawValue.capitalized).tag(option.rawValue)
+                        }
+                    }
+
+                    Picker("Color Mode", selection: $viewModel.contactColorMode) {
+                        ForEach(ContactColorMode.allCases, id: \.self) { mode in
+                            Text(mode.displayName).tag(mode)
+                        }
+                    }
+
+                    if viewModel.contactColorMode == .staticColor {
+                        Picker("Text Color", selection: $viewModel.contactTextColor) {
+                            ForEach(ContactColorOption.allCases, id: \.rawValue) { option in
+                                Text(option.rawValue.capitalized).tag(option.rawValue)
+                            }
+                        }
+                    } else {
+                        Text("Dynamic mode colors text based on BG range: Green (in range), Yellow (high), Red (low)")
+                            .font(.footnote)
+                            .foregroundColor(.secondary)
+                    }
+                }
+
+                Section(header: Text("Additional Information")) {
+                    Text("To see your trend, delta, or IOB, include them in another contact or create separate contacts. When using 'Include', select which contact to add the value to.")
+                        .font(.footnote)
+                        .foregroundColor(.secondary)
+                        .padding(.vertical, 4)
+
+                    Text("Trend")
+                        .font(.subheadline)
+                    Picker("Show Trend", selection: $viewModel.contactTrend) {
+                        ForEach(ContactIncludeOption.allCases, id: \.self) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+
+                    if viewModel.contactTrend == .include {
+                        Picker("Include Trend in", selection: $viewModel.contactTrendTarget) {
+                            ForEach(viewModel.availableTargets(for: .Trend), id: \.self) { target in
+                                Text(target.rawValue).tag(target)
+                            }
+                        }
+                    }
+
+                    Text("Delta")
+                        .font(.subheadline)
+                    Picker("Show Delta", selection: $viewModel.contactDelta) {
+                        ForEach(ContactIncludeOption.allCases, id: \.self) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+
+                    if viewModel.contactDelta == .include {
+                        Picker("Include Delta in", selection: $viewModel.contactDeltaTarget) {
+                            ForEach(viewModel.availableTargets(for: .Delta), id: \.self) { target in
+                                Text(target.rawValue).tag(target)
+                            }
+                        }
+                    }
+
+                    Text("IOB")
+                        .font(.subheadline)
+                    Picker("Show IOB", selection: $viewModel.contactIOB) {
+                        ForEach(ContactIncludeOption.allCases, id: \.self) { option in
+                            Text(option.rawValue).tag(option)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+
+                    if viewModel.contactIOB == .include {
+                        Picker("Include IOB in", selection: $viewModel.contactIOBTarget) {
+                            ForEach(viewModel.availableTargets(for: .IOB), id: \.self) { target in
+                                Text(target.rawValue).tag(target)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text(alertTitle), message: Text(alertMessage), dismissButton: .default(Text("OK")))
+        }
+        .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+        .navigationBarTitle("Contact", displayMode: .inline)
+    }
+
+    private func requestContactAccess() {
+        let contactStore = CNContactStore()
+        let status = CNContactStore.authorizationStatus(for: .contacts)
+
+        if status == .authorized {
+            // Already authorized, do nothing
+        } else if status == .notDetermined {
+            contactStore.requestAccess(for: .contacts) { granted, _ in
+                DispatchQueue.main.async {
+                    if !granted {
+                        viewModel.contactEnabled = false
+                        showAlert(title: "Access Denied", message: "Please allow access to Contacts in Settings to enable this feature.")
+                    }
+                }
+            }
+        } else if status == .denied {
+            viewModel.contactEnabled = false
+            showAlert(title: "Access Denied", message: "Access to Contacts is denied. Please go to Settings and enable Contacts access.")
+        } else if status == .restricted {
+            viewModel.contactEnabled = false
+            showAlert(title: "Access Restricted", message: "Access to Contacts is restricted.")
+        } else {
+            viewModel.contactEnabled = false
+            showAlert(title: "Error", message: "An unknown error occurred while checking Contacts access.")
+        }
+    }
+
+    private func showAlert(title: String, message: String) {
+        alertTitle = title
+        alertMessage = message
+        showAlert = true
+    }
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/ImportExport/ImportExportSettingsView.swift
+UI STRINGS:
+- Import Settings
+- Scan QR Code to Import Settings
+- Export Settings To QR Code
+- Export [dynamic exportType.rawValue]
+- [dynamic] qrCodeErrorMessage / success message
+- Import/Export Settings
+- Scan this QR code with another LoopFollow app to import [dynamic exportType.importDescription]
+- Failed to generate QR code
+- Close
+- Import Settings
+- Review the settings that will be imported
+- Settings to Import
+- Nightscout URL
+- Dexcom Username
+- Remote Type
+- Alarms
+- [dynamic] <count> alarm(s): <names>
+- APNS Key ID
+- Warning
+- This will overwrite your current settings
+- APNS warning: importing APNS settings will overwrite your existing APNS Key ID and APNS Key.
+- Import Settings
+- Cancel
+- [dynamic] SettingRowView title/value pairs passed by callers
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// ImportExportSettingsView.swift
+
+import AVFoundation
+import SwiftUI
+
+struct ImportExportSettingsView: View {
+    @StateObject private var viewModel = ImportExportSettingsViewModel()
+
+    var body: some View {
+        List {
+            // MARK: - Import Section
+
+            Section("Import Settings") {
+                Button(action: {
+                    viewModel.isShowingQRCodeScanner = true
+                }) {
+                    HStack {
+                        Image(systemName: "qrcode.viewfinder")
+                            .foregroundColor(.blue)
+                        Text("Scan QR Code to Import Settings")
+                    }
+                }
+                .buttonStyle(.plain)
+            }
+
+            // MARK: - Export Section
+
+            Section("Export Settings To QR Code") {
+                ForEach(ImportExportSettingsViewModel.ExportType.allCases, id: \.self) { exportType in
+                    Button(action: {
+                        if exportType == .alarms {
+                            viewModel.showAlarmSelection()
+                        } else {
+                            viewModel.exportType = exportType
+                            if let qrString = viewModel.generateQRCodeForExport() {
+                                viewModel.qrCodeString = qrString
+                                viewModel.isShowingQRCodeDisplay = true
+                            }
+                        }
+                    }) {
+                        HStack {
+                            Image(systemName: exportType.icon)
+                                .foregroundColor(.blue)
+                            Text("Export \(exportType.rawValue)")
+                            Spacer()
+                            Image(systemName: exportType == .alarms ? "list.bullet" : "qrcode")
+                                .foregroundColor(.secondary)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                }
+            }
+
+            // MARK: - Status Message
+
+            if !viewModel.qrCodeErrorMessage.isEmpty {
+                Section {
+                    let isSuccess = viewModel.qrCodeErrorMessage.contains("successfully") || viewModel.qrCodeErrorMessage.contains("Successfully imported")
+                    let displayText = isSuccess ? "✅ \(viewModel.qrCodeErrorMessage)" : viewModel.qrCodeErrorMessage
+
+                    Text(displayText)
+                        .foregroundColor(isSuccess ? .green : .red)
+                        .font(.caption)
+                }
+            }
+        }
+        .navigationTitle("Import/Export Settings")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $viewModel.isShowingQRCodeScanner) {
+            SimpleQRCodeScannerView { result in
+                viewModel.handleQRCodeScanResult(result)
+            }
+        }
+        .sheet(isPresented: $viewModel.isShowingQRCodeDisplay) {
+            NavigationView {
+                VStack {
+                    if !viewModel.qrCodeString.isEmpty {
+                        QRCodeDisplayView(
+                            qrCodeString: viewModel.qrCodeString,
+                            size: CGSize(width: 300, height: 300)
+                        )
+                        .padding()
+
+                        Text("Scan this QR code with another LoopFollow app to import \(viewModel.exportType.importDescription)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                            .multilineTextAlignment(.center)
+                            .padding(.horizontal, 20)
+                    } else {
+                        Text("Failed to generate QR code")
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+                }
+                .navigationTitle("Export \(viewModel.exportType.rawValue)")
+                .navigationBarTitleDisplayMode(.inline)
+                .navigationBarItems(trailing: Button("Close") {
+                    viewModel.isShowingQRCodeDisplay = false
+                })
+            }
+        }
+        .sheet(isPresented: $viewModel.isShowingAlarmSelection) {
+            AlarmSelectionView(
+                exportedAlarmIds: viewModel.exportedAlarmIds,
+                onConfirm: { selectedAlarms in
+                    viewModel.exportSelectedAlarms(selectedAlarms)
+                },
+                onCancel: {
+                    viewModel.cancelAlarmSelection()
+                }
+            )
+        }
+        .onDisappear {
+            viewModel.resetExportedAlarms()
+        }
+        .sheet(isPresented: $viewModel.showImportConfirmation) {
+            ImportConfirmationView(viewModel: viewModel)
+        }
+    }
+}
+
+struct ImportConfirmationView: View {
+    @ObservedObject var viewModel: ImportExportSettingsViewModel
+
+    var body: some View {
+        NavigationView {
+            VStack(spacing: 20) {
+                // Header
+                VStack(spacing: 8) {
+                    Image(systemName: "square.and.arrow.down")
+                        .font(.system(size: 50))
+                        .foregroundColor(.blue)
+
+                    Text("Import Settings")
+                        .font(.title2)
+                        .fontWeight(.semibold)
+
+                    Text("Review the settings that will be imported")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+                }
+                .padding(.top, 20)
+
+                // Settings Preview
+                if let preview = viewModel.importPreview {
+                    VStack(alignment: .leading, spacing: 16) {
+                        Text("Settings to Import")
+                            .font(.headline)
+                            .padding(.horizontal)
+
+                        VStack(spacing: 12) {
+                            if let url = preview.nightscoutURL, !url.isEmpty {
+                                SettingRowView(
+                                    icon: "network",
+                                    title: "Nightscout URL",
+                                    value: url,
+                                    color: .blue
+                                )
+                            }
+
+                            if let username = preview.dexcomUsername, !username.isEmpty {
+                                SettingRowView(
+                                    icon: "person.circle",
+                                    title: "Dexcom Username",
+                                    value: username,
+                                    color: .green
+                                )
+                            }
+
+                            if let remoteType = preview.remoteType, !remoteType.isEmpty, remoteType != "None" {
+                                SettingRowView(
+                                    icon: "antenna.radiowaves.left.and.right",
+                                    title: "Remote Type",
+                                    value: remoteType,
+                                    color: .orange
+                                )
+                            }
+
+                            if preview.alarmCount > 0 {
+                                SettingRowView(
+                                    icon: "bell",
+                                    title: "Alarms",
+                                    value: "\(preview.alarmCount) alarm(s): \(preview.alarmNames.joined(separator: ", "))",
+                                    color: .red
+                                )
+                            }
+
+                            if let apnsKeyId = preview.apnsKeyId, !apnsKeyId.isEmpty {
+                                SettingRowView(
+                                    icon: "key.horizontal",
+                                    title: "APNS Key ID",
+                                    value: apnsKeyId,
+                                    color: .purple
+                                )
+                            }
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+
+                // Warning
+                VStack(spacing: 8) {
+                    HStack {
+                        Image(systemName: "exclamationmark.triangle")
+                            .foregroundColor(.orange)
+                        Text("Warning")
+                            .fontWeight(.semibold)
+                            .foregroundColor(.orange)
+                    }
+
+                    Text("This will overwrite your current settings")
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .multilineTextAlignment(.center)
+
+                    if let apnsKeyId = viewModel.importPreview?.apnsKeyId, !apnsKeyId.isEmpty {
+                        Text("APNS warning: importing APNS settings will overwrite your existing APNS Key ID and APNS Key.")
+                            .font(.caption)
+                            .foregroundColor(.orange)
+                            .multilineTextAlignment(.center)
+                    }
+                }
+                .padding(.horizontal)
+
+                Spacer()
+
+                // Action Buttons
+                VStack(spacing: 12) {
+                    Button(action: {
+                        viewModel.confirmImport()
+                    }) {
+                        HStack {
+                            Image(systemName: "checkmark")
+                            Text("Import Settings")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color.blue)
+                        .cornerRadius(12)
+                    }
+
+                    Button(action: {
+                        viewModel.cancelImport()
+                    }) {
+                        HStack {
+                            Image(systemName: "xmark")
+                            Text("Cancel")
+                        }
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .cornerRadius(12)
+                    }
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 20)
+            }
+            .navigationBarHidden(true)
+        }
+    }
+}
+
+struct SettingRowView: View {
+    let icon: String
+    let title: String
+    let value: String
+    let color: Color
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: icon)
+                .font(.title2)
+                .foregroundColor(color)
+                .frame(width: 30)
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text(title)
+                    .font(.subheadline)
+                    .fontWeight(.medium)
+
+                Text(value)
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .lineLimit(2)
+            }
+
+            Spacer()
+        }
+        .padding()
+        .background(Color(.systemGray6))
+        .cornerRadius(10)
+    }
+}
+
+#Preview {
+    ImportExportSettingsView()
+}
+
+================================================================================
+
+FILE: /home/runner/work/LoopFollow/LoopFollow/LoopFollow/Settings/ShareLogNoticeView.swift
+UI STRINGS:
+- Thanks for sharing these logs to help us find the problem. Please describe it in as much detail as possible — what time did it happen, what did you do, and what did you expect to happen that didn't?
+- Description
+- Share Logs
+- Cancel
+- Share
+
+FULL CONTENT:
+--------------------------------------------------------------------------------
+// LoopFollow
+// ShareLogNoticeView.swift
+
+import SwiftUI
+
+struct ShareLogNoticeView: View {
+    @State private var noticeText: String = ""
+    let onCancel: () -> Void
+    let onShare: (String) -> Void
+
+    var body: some View {
+        NavigationView {
+            Form {
+                Section {
+                    Text("Thanks for sharing these logs to help us find the problem. Please describe it in as much detail as possible — what time did it happen, what did you do, and what did you expect to happen that didn't?")
+                        .font(.callout)
+                        .foregroundColor(.secondary)
+                }
+
+                Section(header: Text("Description")) {
+                    TextEditor(text: $noticeText)
+                        .frame(minHeight: 180)
+                }
+            }
+            .preferredColorScheme(Storage.shared.appearanceMode.value.colorScheme)
+            .navigationBarTitle("Share Logs", displayMode: .inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel", action: onCancel)
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Share") { onShare(noticeText) }
+                }
+            }
+        }
+    }
+}
+
+================================================================================
+
