@@ -15,9 +15,9 @@ struct NavigationRow<Value: Hashable>: View {
             HStack {
                 Glyph(symbol: icon, tint: iconTint)
                 VStack(alignment: .leading, spacing: 2) {
-                    Text(title)
+                    Text(LocalizedStringKey(title))
                     if let subtitle {
-                        Text(subtitle)
+                        Text(LocalizedStringKey(subtitle))
                             .font(.caption)
                             .foregroundStyle(.secondary)
                     }
