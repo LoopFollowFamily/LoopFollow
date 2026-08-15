@@ -10,7 +10,7 @@ struct SettingsMenuView: View {
     var body: some View {
         List {
             ForEach(SettingsRoute.menuSections(nightscoutConfigured: !nightscoutURL.value.isEmpty), id: \.0) { section, routes in
-                Section(section.rawValue) {
+                Section(Text(LocalizedStringKey(section.rawValue))) {
                     ForEach(routes) { route in
                         NavigationRow(title: route.title,
                                       icon: route.icon,

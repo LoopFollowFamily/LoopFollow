@@ -1,0 +1,384 @@
+/* LoopFollow — Norwegian Bokmål (nb) translations
+   Only UI-visible strings. Persisted keys, enum raw values, and internal
+   identifiers are intentionally left unchanged.
+*/
+
+// MARK: - Onboarding: Welcome
+"Welcome to LoopFollow" = "Velkommen til LoopFollow";
+"You're already set up. You can skip this guide, or walk through it to review your settings." = "Du er allerede konfigurert. Du kan hoppe over denne veiviseren, eller gå gjennom den for å se gjennom innstillingene dine.";
+"Let's get you connected to your data and set up a few recommended alarms. It only takes a few minutes." = "La oss koble deg til dataene dine og sette opp noen anbefalte alarmer. Det tar bare noen minutter.";
+"Get Started" = "Kom i gang";
+"Skip" = "Hopp over";
+"Review setup anyway" = "Se gjennom oppsett likevel";
+
+// MARK: - Onboarding: Overview
+"Here's what we'll do" = "Her er hva vi skal gjøre";
+"A quick, straightforward setup — about 5 minutes. You can change anything later in Settings." = "Et raskt, enkelt oppsett — ca. 5 minutter. Du kan endre hva som helst senere i Innstillinger.";
+"You're all set" = "Alt er klart";
+"Your data source is connected and your alarms are in place — there's nothing to set up here. You can fine-tune anything later in Settings." = "Datakilden din er tilkoblet og alarmene dine er på plass — det er ingenting å sette opp her. Du kan finjustere hva som helst senere i Innstillinger.";
+"Connect your data" = "Koble til data";
+"Link a Nightscout site or a Dexcom Share account." = "Koble til et Nightscout-nettsted eller en Dexcom Share-konto.";
+"Units & metrics" = "Enheter og målinger";
+"Choose how glucose and statistics are shown." = "Velg hvordan glukose og statistikk vises.";
+"Recommended alarms" = "Anbefalte alarmer";
+"Turn on a few useful alarms with sensible defaults." = "Slå på noen nyttige alarmer med fornuftige standardverdier.";
+"Finish up" = "Avslutt";
+"Arrange your tabs and set notification preferences." = "Organiser fanene dine og angi varslingsinnstillinger.";
+"Done" = "Ferdig";
+"Continue" = "Fortsett";
+
+// MARK: - Onboarding: Data Source Choice
+"Choose a data source" = "Velg en datakilde";
+"LoopFollow needs a glucose data source. Pick one now — you can change or add more later in Settings." = "LoopFollow trenger en glukosedatakilde. Velg en nå — du kan endre eller legge til flere senere i Innstillinger.";
+"Follow a Nightscout site. Works with Loop, Trio, and most uploaders. Enables the full set of LoopFollow features." = "Følg et Nightscout-nettsted. Fungerer med Loop, Trio og de fleste opplastere. Gir tilgang til alle LoopFollow-funksjoner.";
+"Dexcom Share" = "Dexcom Share";
+"Follow glucose directly from a Dexcom Share account, without a Nightscout site." = "Følg glukose direkte fra en Dexcom Share-konto, uten et Nightscout-nettsted.";
+"Copy from another phone" = "Kopier fra en annen telefon";
+"Already using LoopFollow on another phone? Scan its QR code to copy the connection here." = "Bruker du allerede LoopFollow på en annen telefon? Skann QR-koden for å kopiere tilkoblingen hit.";
+
+// MARK: - Onboarding: Nightscout Connect
+"Connect to Nightscout" = "Koble til Nightscout";
+"Enter your site address. We'll check it, and only ask for a token if your site needs one." = "Skriv inn nettstedsadressen. Vi sjekker den, og ber bare om et token hvis nettstedet trenger det.";
+"Add a token" = "Legg til et token";
+"This site needs a token. Paste one, or have LoopFollow create a read-only token from your API secret." = "Dette nettstedet trenger et token. Lim inn ett, eller la LoopFollow opprette et skrivebeskyttet token fra API-hemmeligheten din.";
+"Token created" = "Token opprettet";
+"You're connected" = "Du er tilkoblet";
+"Your read-only token is ready. Tap Continue to keep going — your site may take a few minutes to start accepting it." = "Det skrivebeskyttede tokenet er klart. Trykk Fortsett for å fortsette — nettstedet ditt kan bruke noen minutter på å begynne å godta det.";
+"Your read-only token is set up. Tap Continue to keep going." = "Det skrivebeskyttede tokenet er satt opp. Trykk Fortsett for å fortsette.";
+"Site URL" = "Nettstedsadresse";
+"Enter or paste your full Nightscout address. If the link already includes a token, we'll fill both in for you." = "Skriv inn eller lim inn hele Nightscout-adressen. Hvis lenken allerede inkluderer et token, fyller vi inn begge for deg.";
+"I have a token" = "Jeg har et token";
+"Create one for me" = "Opprett ett for meg";
+"Your API secret is used once to create a read-only access token and is never stored." = "API-hemmeligheten din brukes én gang til å opprette et skrivebeskyttet tilgangstoken og lagres aldri.";
+"Type or paste a token, or a full Nightscout URL that includes a token." = "Skriv inn eller lim inn et token, eller en full Nightscout-URL som inkluderer et token.";
+"Access Token" = "Tilgangstoken";
+"Token" = "Token";
+"Enter Token" = "Skriv inn token";
+"Creating read-only token…" = "Oppretter skrivebeskyttet token…";
+"That's your API secret — create a read-only token" = "Det er API-hemmeligheten din — opprett et skrivebeskyttet token";
+"API Secret" = "API-hemmelighet";
+"Secret" = "Hemmelighet";
+"Enter API Secret" = "Skriv inn API-hemmelighet";
+"Create Read-Only Token" = "Opprett skrivebeskyttet token";
+
+// MARK: - Onboarding: Dexcom Connect
+"Connect Dexcom Share" = "Koble til Dexcom Share";
+"Sign in with the Dexcom Share account that shares glucose data." = "Logg inn med Dexcom Share-kontoen som deler glukosedata.";
+
+// MARK: - Onboarding: Connect Import (QR)
+"On your other phone, open Settings → Nightscout (or Dexcom Share) → Import/Export and export to a QR code. Then scan it here." = "Åpne Innstillinger → Nightscout (eller Dexcom Share) → Importer/Eksporter på den andre telefonen og eksporter til en QR-kode. Skann den deretter her.";
+"Scan a different code" = "Skann en annen kode";
+"Scan QR Code" = "Skann QR-kode";
+"Settings imported — you're connected." = "Innstillinger importert — du er tilkoblet.";
+
+// MARK: - Onboarding: Notifications
+"Stay informed" = "Hold deg oppdatert";
+"LoopFollow uses notifications to deliver your alarms — like low or high glucose, or a missed reading. Without them, alarms can't reach you when the app is in the background." = "LoopFollow bruker varsler for å levere alarmene dine — som lav eller høy glukose, eller manglende avlesning. Uten dem kan ikke alarmer nå deg når appen er i bakgrunnen.";
+"We'll ask iOS for permission next. You can change this any time in the Settings app." = "Vi ber iOS om tillatelse nå. Du kan endre dette når som helst i Innstillinger-appen.";
+"Enable Notifications" = "Aktiver varsler";
+"Not now" = "Ikke nå";
+
+// MARK: - Onboarding: Units
+"Units" = "Enheter";
+"Choose how glucose values are displayed. You can change this later in Settings." = "Velg hvordan glukoseverdier vises. Du kan endre dette senere i Innstillinger.";
+"Statistics" = "Statistikk";
+"Choose how LoopFollow's statistics are measured and displayed." = "Velg hvordan LoopFollows statistikk måles og vises.";
+
+// MARK: - Onboarding: Alarms
+"Enable this alarm" = "Aktiver denne alarmen";
+"Alert below" = "Varsle under";
+"Warn early by" = "Advare tidlig med";
+"Alert above" = "Varsle over";
+"Only after high for" = "Bare etter høy i";
+"Drop per reading" = "Fall per avlesning";
+"Readings in a row" = "Avlesninger på rad";
+"No reading for" = "Ingen avlesning i";
+"No loop for" = "Ingen loop i";
+"At or below" = "Ved eller under";
+"Remind after" = "Påminn etter";
+"Active during" = "Aktiv om";
+
+// MARK: - Onboarding: Alarms General
+"Alarm basics" = "Grunnleggende alarmer";
+"Set when your day and night begin, and how alarm sound behaves. You can fine-tune everything later in the Menu." = "Angi når dag og natt begynner, og hvordan alarmlyd oppfører seg. Du kan finjustere alt senere i Menyen.";
+"Day starts" = "Dag starter";
+"Night starts" = "Natt starter";
+"Day / Night" = "Dag / Natt";
+"Alarms can behave differently during the day and at night." = "Alarmer kan oppføre seg annerledes om dagen og om natten.";
+"Override system volume" = "Overstyr systemvolum";
+"Play sound during calls" = "Spill av lyd under samtaler";
+"Sound" = "Lyd";
+"Overriding the system volume lets alarms be heard even when your phone is silenced or in a Focus mode." = "Overstyring av systemvolumet lar alarmer høres selv når telefonen er dempet eller i en Fokus-modus.";
+
+// MARK: - Onboarding: Tab Order
+"Arrange your tabs" = "Organiser fanene dine";
+"Pick which features sit in the tab bar. You can always reach everything through the Menu." = "Velg hvilke funksjoner som er i fanelinjen. Du kan alltid nå alt gjennom Menyen.";
+
+// MARK: - Onboarding: Completion
+"You're ready to go. Adjust everything later from the Menu — and when you have a moment, these are worth a look:" = "Du er klar til å begynne. Juster alt senere fra Menyen — og når du har et øyeblikk, er disse verdt å se på:";
+"Contact image" = "Kontaktbilde";
+"Show your glucose on your Apple Watch face through a contact." = "Vis glukosen din på Apple Watch-urskiven via en kontakt.";
+"Custom alarms" = "Egendefinerte alarmer";
+"Build your own alarms beyond the recommended set." = "Bygg dine egne alarmer utover det anbefalte settet.";
+"Remote commands" = "Fjernkommandoer";
+"Send carbs, boluses, and temp targets to Trio or Loop." = "Send karbohydrater, bolusdoser og midlertidige mål til Trio eller Loop.";
+"Finish" = "Avslutt";
+
+// MARK: - Onboarding: Telemetry
+"Help us help you" = "Hjelp oss med å hjelpe deg";
+"You can choose to share anonymous information with the developers to help improve LoopFollow — such as app and iOS version, device type, which app you're following, and a few settings. Your health data, credentials, time zone, and logs remain on your device." = "Du kan velge å dele anonym informasjon med utviklerne for å hjelpe til med å forbedre LoopFollow — som app- og iOS-versjon, enhetstype, hvilken app du følger og noen innstillinger. Helsedata, legitimasjon, tidssone og logger forblir på enheten din.";
+"See exactly what's sent" = "Se nøyaktig hva som sendes";
+"You can change this any time in Settings → General → Diagnostics." = "Du kan endre dette når som helst i Innstillinger → Generelt → Diagnostikk.";
+"Yes, send anonymous stats" = "Ja, send anonym statistikk";
+"No thanks" = "Nei takk";
+
+// MARK: - Onboarding: Navigation
+"Back" = "Tilbake";
+
+// MARK: - Settings Menu
+"Settings" = "Innstillinger";
+"Data Settings" = "Datainnstillinger";
+"Display Settings" = "Visningsinnstillinger";
+"App Settings" = "Appinnstillinger";
+"Alarms" = "Alarmer";
+"Integrations" = "Integrasjoner";
+"Advanced Settings" = "Avanserte innstillinger";
+"Loading stats..." = "Laster statistikk…";
+
+// MARK: - Settings Routes (menu row titles)
+"General" = "Generelt";
+"Graph" = "Graf";
+"Information Display" = "Informasjonsvisning";
+"Units and Metrics" = "Enheter og målinger";
+"Tabs" = "Faner";
+"Background Refresh" = "Bakgrunnsoppdatering";
+"Import/Export" = "Importer/Eksporter";
+"APN" = "APN";
+"Live Activity" = "Live-aktivitet";
+"Remote" = "Fjernkontroll";
+"Calendar" = "Kalender";
+"Contact" = "Kontakt";
+"Advanced" = "Avansert";
+
+// MARK: - General Settings
+"General Settings" = "Generelle innstillinger";
+"Display" = "Visning";
+"Display App Badge" = "Vis app-merke";
+"Persistent Notification" = "Vedvarende varsling";
+"Appearance" = "Utseende";
+"Display Stats" = "Vis statistikk";
+"Display Small Graph" = "Vis liten graf";
+"Color BG Text" = "Farge BG-tekst";
+"Keep Screen Active" = "Hold skjermen aktiv";
+"Show Display Name" = "Vis visningsnavn";
+"Snoozer emoji" = "Utsett-emoji";
+"Force portrait mode" = "Tving stående modus";
+"Time Zone" = "Tidssone";
+"Time Zone Override" = "Overstyr tidssone";
+"Speak BG" = "Les opp BG";
+"Language" = "Språk";
+"English" = "Engelsk";
+"French" = "Fransk";
+"Italian" = "Italiensk";
+"Slovak" = "Slovakisk";
+"Swedish" = "Svensk";
+"Always" = "Alltid";
+"Low" = "Lav";
+"Proactive Low" = "Proaktiv lav";
+"Low BG Limit" = "Lav BG-grense";
+"Fast Drop Delta" = "Rask nedgang delta";
+"High" = "Høy";
+"High BG Limit" = "Høy BG-grense";
+"Diagnostics" = "Diagnostikk";
+"Send anonymous usage stats" = "Send anonym bruksstatistikk";
+"What's sent" = "Hva sendes";
+"Privacy" = "Personvern";
+
+// MARK: - Graph Settings
+"Graph Settings" = "Grafinnstillinger";
+"Graph Display" = "Grafvisning";
+"Display Dots" = "Vis punkter";
+"Display Lines" = "Vis linjer";
+"Show DIA Lines" = "Vis DIA-linjer";
+"Show −30 min Line" = "Vis −30 min-linje";
+"Show −90 min Line" = "Vis −90 min-linje";
+"Show Yesterday's BG" = "Vis gårsdagens BG";
+"Show Midnight Lines" = "Vis midnattlinjer";
+"Treatments" = "Behandlinger";
+"Show Carb/Bolus Values" = "Vis karbohydrat/bolus-verdier";
+"Show Carb Absorption" = "Vis karbohydratopptak";
+"Treatments on Small Graph" = "Behandlinger på liten graf";
+"Small Graph" = "Liten graf";
+"Height" = "Høyde";
+"Prediction" = "Prognose";
+"Hours of Prediction" = "Timer med prognose";
+"Prediction Style" = "Prognosestil";
+"Basal / BG Scale" = "Basal / BG-skala";
+"Min Basal" = "Min Basal";
+"Min BG Scale" = "Min BG-skala";
+"History" = "Historikk";
+"Show Days Back" = "Vis dager tilbake";
+
+// MARK: - Units Settings
+"Units and Metrics" = "Enheter og målinger";
+"Glucose Unit" = "Glukoseenhet";
+"Range Mode" = "Områdemodus";
+"Glycemic Metrics" = "Glykemiske målinger";
+"Variability" = "Variabilitet";
+
+// MARK: - Calendar Settings
+"Save BG to Calendar" = "Lagre BG til kalender";
+"Calendar access denied" = "Kalendertilgang nektet";
+"Calendar Text" = "Kalendertekst";
+"Line 1" = "Linje 1";
+"Line 2" = "Linje 2";
+"Available Variables" = "Tilgjengelige variabler";
+
+// MARK: - APN Settings
+"LoopFollow APNs Credentials" = "LoopFollow APNs-legitimasjon";
+"APNS Key ID" = "APNS-nøkkel-ID";
+"Enter APNS Key ID" = "Skriv inn APNS-nøkkel-ID";
+"Valid Key ID" = "Gyldig nøkkel-ID";
+"Invalid Key ID" = "Ugyldig nøkkel-ID";
+"APNS Key" = "APNS-nøkkel";
+"Valid APNs key" = "Gyldig APNs-nøkkel";
+"Invalid APNs key" = "Ugyldig APNs-nøkkel";
+"Paste APNS Key" = "Lim inn APNS-nøkkel";
+"Paste the full .p8 contents — must include the BEGIN PRIVATE KEY and END PRIVATE KEY lines." = "Lim inn hele .p8-innholdet — må inkludere linjene BEGIN PRIVATE KEY og END PRIVATE KEY.";
+
+// MARK: - Dexcom Settings
+"Dexcom Settings" = "Dexcom-innstillinger";
+"Username" = "Brukernavn";
+"Enter Username" = "Skriv inn brukernavn";
+"Password" = "Passord";
+"Enter Password" = "Skriv inn passord";
+"Server" = "Server";
+"US" = "USA";
+"Outside US" = "Utenfor USA";
+"Import Settings" = "Importer innstillinger";
+"Import Settings from QR Code" = "Importer innstillinger fra QR-kode";
+
+// MARK: - Contact Settings
+"Contact Integration" = "Kontaktintegrasjon";
+"Color Options" = "Fargealternativer";
+"Additional Information" = "Tilleggsinformasjon";
+"Enable Contact BG Updates" = "Aktiver BG-oppdateringer for kontakt";
+"Background Color" = "Bakgrunnsfarge";
+"Color Mode" = "Fargemodus";
+"Text Color" = "Tekstfarge";
+"Show Trend" = "Vis trend";
+"Show Delta" = "Vis delta";
+"Show IOB" = "Vis IOB";
+"Dynamic mode colors text based on BG range: Green (in range), Yellow (high), Red (low)" = "Dynamisk modus farger tekst basert på BG-område: Grønn (i område), Gul (høy), Rød (lav)";
+"Trend" = "Trend";
+"Delta" = "Delta";
+"IOB" = "IOB";
+"OK" = "OK";
+"Access Denied" = "Tilgang nektet";
+"Please allow access to Contacts in Settings to enable this feature." = "Tillat tilgang til Kontakter i Innstillinger for å aktivere denne funksjonen.";
+"Access to Contacts is denied. Please go to Settings and enable Contacts access." = "Tilgang til Kontakter er nektet. Gå til Innstillinger og aktiver Kontakter-tilgang.";
+"Access Restricted" = "Tilgang begrenset";
+"Access to Contacts is restricted." = "Tilgang til Kontakter er begrenset.";
+"Error" = "Feil";
+"An unknown error occurred while checking Contacts access." = "En ukjent feil oppsto ved kontroll av Kontakter-tilgang.";
+
+// MARK: - Advanced Settings
+"Download Treatments" = "Last ned behandlinger";
+"Download Prediction" = "Last ned prognose";
+"Graph Basal" = "Graf basal";
+"Graph Bolus" = "Graf bolus";
+"Graph Carbs" = "Graf karbohydrater";
+"Graph Other Treatments" = "Graf andre behandlinger";
+"BG Update Delay" = "BG-oppdateringsforsinkelse";
+"Debug Log Level" = "Feilsøkingsloggnivå";
+"Logging Options" = "Loggingsalternativer";
+
+// MARK: - Import/Export Settings
+"Import/Export Settings" = "Importer/Eksporter innstillinger";
+"Export Settings To QR Code" = "Eksporter innstillinger til QR-kode";
+"Scan QR Code to Import Settings" = "Skann QR-kode for å importere innstillinger";
+"Failed to generate QR code" = "Kunne ikke generere QR-kode";
+"Close" = "Lukk";
+"Review the settings that will be imported" = "Se gjennom innstillingene som vil importeres";
+"Settings to Import" = "Innstillinger å importere";
+"Nightscout URL" = "Nightscout-URL";
+"Dexcom Username" = "Dexcom-brukernavn";
+"Remote Type" = "Fjernkontrolltype";
+"APNS Key ID" = "APNS-nøkkel-ID";
+"Warning" = "Advarsel";
+"This will overwrite your current settings" = "Dette vil overskrive de gjeldende innstillingene dine";
+"APNS warning: importing APNS settings will overwrite your existing APNS Key ID and APNS Key." = "APNS-advarsel: import av APNS-innstillinger vil overskrive eksisterende APNS-nøkkel-ID og APNS-nøkkel.";
+"Cancel" = "Avbryt";
+
+// MARK: - Share Log
+"Share Logs" = "Del logger";
+"Thanks for sharing these logs to help us find the problem. Please describe it in as much detail as possible — what time did it happen, what did you do, and what did you expect to happen that didn't?" = "Takk for at du deler disse loggene for å hjelpe oss med å finne problemet. Beskriv det så detaljert som mulig — når skjedde det, hva gjorde du, og hva forventet du skulle skje som ikke skjedde?";
+"Description" = "Beskrivelse";
+"Share" = "Del";
+
+// MARK: - Alarm Settings
+"Alarm Settings" = "Alarminnstillinger";
+"Snooze & Mute Options" = "Utsett- og dempealternativer";
+"All Alerts Snoozed" = "Alle varsler utsatt";
+"Until" = "Til";
+"All Sounds Muted" = "All lyd dempet";
+"Day / Night Schedule" = "Dag/natt-timeplan";
+"Pick when your day period begins and when your night period begins. Any time from your Day-starts time up until your Night-starts time will count as day; " = "Velg når dagperioden starter og når natteperioden starter. All tid fra Dag-starter-tidspunktet til Natt-starter-tidspunktet regnes som dag; ";
+"Override System Volume" = "Overstyr systemvolum";
+"Audio During Calls" = "Lyd under samtaler";
+"Ignore Zero BG" = "Ignorer null BG";
+"Auto‑Snooze CGM Start" = "Auto-utsett CGM-start";
+"Volume Buttons Snooze Alarms" = "Volumknapper utsetter alarmer";
+"Volume Level: " = "Volumnivå: ";
+
+// MARK: - Home
+"Home" = "Hjem";
+
+// MARK: - More Menu
+"Menu" = "Meny";
+"Search" = "Søk";
+"No Results" = "Ingen resultater";
+"Features" = "Funksjoner";
+"Logging" = "Logging";
+"Support & Community" = "Støtte og fellesskap";
+"Build Information" = "Bygginformasjon";
+"View Log" = "Vis logg";
+"Share Logs" = "Del logger";
+"Fetching\u{2026}" = "Henter\u{2026}";
+"No Logs Available" = "Ingen logger tilgjengelig";
+"There are no logs to share." = "Det er ingen logger å dele.";
+
+// MARK: - Nightscout Settings
+"Nightscout Settings" = "Nightscout-innstillinger";
+"URL" = "URL";
+"Enter URL" = "Skriv inn URL";
+"Token or API secret" = "Token eller API-hemmelighet";
+"Status" = "Status";
+"Real-time Updates" = "Sanntidsoppdateringer";
+"Enable WebSocket" = "Aktiver WebSocket";
+"Paste a Nightscout token. If your site needs one and you only have the API secret, paste that instead — LoopFollow can create a read-only token for you." = "Lim inn et Nightscout-token. Hvis nettstedet ditt trenger ett og du bare har API-hemmeligheten, lim inn den i stedet — LoopFollow kan opprette et skrivebeskyttet token for deg.";
+
+// MARK: - Background Refresh Settings
+"Background Refresh Settings" = "Innstillinger for bakgrunnsoppdatering";
+"Background Refresh Type" = "Type bakgrunnsoppdatering";
+"Adjust the background refresh type." = "Juster typen bakgrunnsoppdatering.";
+"Selected Device" = "Valgt enhet";
+"Unknown Device" = "Ukjent enhet";
+"Disconnect" = "Koble fra";
+"Reconnecting..." = "Kobler til igjen...";
+"Connected" = "Tilkoblet";
+
+// MARK: - Live Activity Settings
+"Live Activity" = "Live-aktivitet";
+"Enable Live Activity" = "Aktiver live-aktivitet";
+"Restart Live Activity" = "Start live-aktivitet på nytt";
+"Live Activity Restarted" = "Live-aktivitet startet på nytt";
+"Live Activity updates require APNs credentials. Configure them in Settings → APN." = "Live-aktivitetsoppdateringer krever APNs-legitimasjon. Konfigurer dem i Innstillinger → APN.";
+"APNs credentials are missing or invalid — Live Activity updates will not work. Open Settings → APN to fix." = "APNs-legitimasjon mangler eller er ugyldig — Live-aktivitetsoppdateringer vil ikke fungere. Åpne Innstillinger → APN for å fikse dette.";
+"Grid Slots - Live Activity" = "Ruteplasser – Live-aktivitet";
+"Grid Slot - CarPlay / Watch" = "Ruteplass – CarPlay / Watch";
+"Right slot" = "Høyre plass";
+"Top left" = "Øverst til venstre";
+"Top right" = "Øverst til høyre";
+"Bottom left" = "Nederst til venstre";
+"Bottom right" = "Nederst til høyre";
