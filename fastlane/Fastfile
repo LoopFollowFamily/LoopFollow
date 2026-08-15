@@ -76,16 +76,8 @@ platform :ios do
     # First, ensure identifiers and capabilities are set up
     identifiers
     
-    # Then get matching certificates and provisioning profiles
-    match(
-      type: "appstore",
-      git_basic_authorization: Base64.strict_encode64("#{GITHUB_REPOSITORY_OWNER}:#{GH_PAT}"),
-      app_identifier: [
-        APP_IDENTIFIER,
-        LA_IDENTIFIER
-      ],
-      force: true
-    )
+    # Then get matching certificates and provisioning profiles with proper capability sync
+    certs
 
     mapping = Actions.lane_context[
       SharedValues::MATCH_PROVISIONING_PROFILE_MAPPING
