@@ -30,7 +30,7 @@ struct AlarmListView: View {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else { return true }
         return alarm.name.localizedCaseInsensitiveContains(query)
-            || alarm.type.rawValue.localizedCaseInsensitiveContains(query)
+            || alarm.type.localizedName.localizedCaseInsensitiveContains(query)
     }
 
     private var hasResults: Bool {

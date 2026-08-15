@@ -11,7 +11,8 @@ protocol DayNightDisplayable {
 
 extension DayNightDisplayable where Self: RawRepresentable, Self.RawValue == String {
     var displayName: String {
-        rawValue == "always" ? "Day & Night" : rawValue.capitalized
+        let key = rawValue == "always" ? "Day & Night" : rawValue.capitalized
+        return NSLocalizedString(key, comment: "Alarm active time option")
     }
 }
 
@@ -277,7 +278,7 @@ struct Alarm: Identifiable, Codable, Equatable {
             }
         }()
 
-        AlarmManager.shared.sendNotification(title: type.rawValue, actionTitle: snoozeDuration == 0 ? "Acknowledge" : "Snooze")
+        AlarmManager.shared.sendNotification(title: type.localizedName, actionTitle: snoozeDuration == 0 ? NSLocalizedString("Acknowledge", comment: "") : NSLocalizedString("Snooze", comment: ""))
 
         if playSound {
             AlarmSound.setSoundFile(soundFile)
@@ -289,7 +290,7 @@ struct Alarm: Identifiable, Codable, Equatable {
 
     init(type: AlarmType) {
         self.type = type
-        name = type.rawValue
+        name = type.localizedName
 
         switch type {
         case .buildExpire:
@@ -401,6 +402,10 @@ extension AlarmType {
         case insulin = "Insulin / Food"
         case device = "Device / System"
         case other = "Override / Target"
+
+        var localizedName: String {
+            NSLocalizedString(rawValue, comment: "Alarm group name")
+        }
     }
 
     var group: Group {
@@ -448,30 +453,30 @@ extension AlarmType {
 
     var blurb: String {
         switch self {
-        case .low: return "Alerts when BG goes below a limit."
-        case .high: return "Alerts when BG rises above a limit."
-        case .fastDrop: return "Rapid downward BG trend."
-        case .fastRise: return "Rapid upward BG trend."
-        case .missedReading: return "No CGM data for X minutes."
-        case .iob: return "High insulin-on-board."
-        case .cob: return "High carbs-on-board."
-        case .missedBolus: return "Carbs without bolus."
-        case .futureCarbs: return "Reminder when future carbs are due."
-        case .recBolus: return "Recommended bolus issued."
-        case .battery: return "Phone battery low."
-        case .batteryDrop: return "Battery drops quickly."
-        case .pump: return "Reservoir level low."
-        case .pumpBattery: return "Pump battery low."
-        case .pumpChange: return "Pump change due."
-        case .sensorChange: return "Sensor change due."
-        case .notLooping: return "Loop hasn’t completed."
-        case .buildExpire: return "Looping-app build expiring."
-        case .dbSize: return "Nightscout database filling up."
-        case .overrideStart: return "Override just started."
-        case .overrideEnd: return "Override ended."
-        case .tempTargetStart: return "Temp target started."
-        case .tempTargetEnd: return "Temp target ended."
-        case .temporary: return "One-time BG limit alert."
+        case .low: return NSLocalizedString("Alerts when BG goes below a limit.", comment: "")
+        case .high: return NSLocalizedString("Alerts when BG rises above a limit.", comment: "")
+        case .fastDrop: return NSLocalizedString("Rapid downward BG trend.", comment: "")
+        case .fastRise: return NSLocalizedString("Rapid upward BG trend.", comment: "")
+        case .missedReading: return NSLocalizedString("No CGM data for X minutes.", comment: "")
+        case .iob: return NSLocalizedString("High insulin-on-board.", comment: "")
+        case .cob: return NSLocalizedString("High carbs-on-board.", comment: "")
+        case .missedBolus: return NSLocalizedString("Carbs without bolus.", comment: "")
+        case .futureCarbs: return NSLocalizedString("Reminder when future carbs are due.", comment: "")
+        case .recBolus: return NSLocalizedString("Recommended bolus issued.", comment: "")
+        case .battery: return NSLocalizedString("Phone battery low.", comment: "")
+        case .batteryDrop: return NSLocalizedString("Battery drops quickly.", comment: "")
+        case .pump: return NSLocalizedString("Reservoir level low.", comment: "")
+        case .pumpBattery: return NSLocalizedString("Pump battery low.", comment: "")
+        case .pumpChange: return NSLocalizedString("Pump change due.", comment: "")
+        case .sensorChange: return NSLocalizedString("Sensor change due.", comment: "")
+        case .notLooping: return NSLocalizedString("Loop hasn't completed.", comment: "")
+        case .buildExpire: return NSLocalizedString("Looping-app build expiring.", comment: "")
+        case .dbSize: return NSLocalizedString("Nightscout database filling up.", comment: "")
+        case .overrideStart: return NSLocalizedString("Override just started.", comment: "")
+        case .overrideEnd: return NSLocalizedString("Override ended.", comment: "")
+        case .tempTargetStart: return NSLocalizedString("Temp target started.", comment: "")
+        case .tempTargetEnd: return NSLocalizedString("Temp target ended.", comment: "")
+        case .temporary: return NSLocalizedString("One-time BG limit alert.", comment: "")
         }
     }
 }

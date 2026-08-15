@@ -7,8 +7,8 @@ import SwiftUI
 struct AlarmBGSection: View {
     // MARK: – public parameters
 
-    let header: String?
-    let footer: String?
+    let header: LocalizedStringKey?
+    let footer: LocalizedStringKey?
     let title: String
     let range: ClosedRange<Double>
 
@@ -19,8 +19,8 @@ struct AlarmBGSection: View {
     // MARK: – designated initialiser
 
     init(
-        header: String? = nil,
-        footer: String? = nil,
+        header: LocalizedStringKey? = nil,
+        footer: LocalizedStringKey? = nil,
         title: String,
         range: ClosedRange<Double>,
         value: Binding<Double?>

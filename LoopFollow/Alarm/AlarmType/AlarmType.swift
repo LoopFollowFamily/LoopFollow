@@ -39,6 +39,13 @@ extension AlarmType {
 }
 
 extension AlarmType {
+    /// Localized display name for this alarm type.
+    var localizedName: String {
+        NSLocalizedString(rawValue, comment: "Alarm type display name")
+    }
+}
+
+extension AlarmType {
     /// `true` for alarms whose primary trigger is a blood-glucose value
     /// or its rate of change.
     var isBGBased: Bool {

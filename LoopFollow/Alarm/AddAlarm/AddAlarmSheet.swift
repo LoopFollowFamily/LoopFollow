@@ -16,9 +16,9 @@ struct AddAlarmSheet: View {
     private func matches(_ type: AlarmType) -> Bool {
         let query = searchText.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !query.isEmpty else { return true }
-        return type.rawValue.localizedCaseInsensitiveContains(query)
+        return type.localizedName.localizedCaseInsensitiveContains(query)
             || type.blurb.localizedCaseInsensitiveContains(query)
-            || type.group.rawValue.localizedCaseInsensitiveContains(query)
+            || type.group.localizedName.localizedCaseInsensitiveContains(query)
     }
 
     var body: some View {
@@ -28,7 +28,7 @@ struct AddAlarmSheet: View {
                     ForEach(AlarmType.Group.allCases, id: \.self) { group in
                         let types = AlarmType.allCases.filter { $0.group == group && matches($0) }
                         if !types.isEmpty {
-                            Section(header: Text(group.rawValue)
+                            Section(header: Text(group.localizedName)
                                 .font(.headline)
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .padding(.horizontal, 4)

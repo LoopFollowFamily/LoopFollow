@@ -5,9 +5,9 @@ import SwiftUI
 
 struct AlarmBGLimitSection: View {
     // ────────── Public API ──────────
-    let header: String?
-    let footer: String?
-    let toggleText: String
+    let header: LocalizedStringKey?
+    let footer: LocalizedStringKey?
+    let toggleText: LocalizedStringKey
     let pickerTitle: String
     let range: ClosedRange<Double>
     let defaultOnValue: Double
@@ -16,9 +16,9 @@ struct AlarmBGLimitSection: View {
     // ────────────────────────────────
 
     init(
-        header: String? = nil,
-        footer: String? = nil,
-        toggleText: String,
+        header: LocalizedStringKey? = nil,
+        footer: LocalizedStringKey? = nil,
+        toggleText: LocalizedStringKey,
         pickerTitle: String,
         range: ClosedRange<Double>,
         defaultOnValue: Double? = nil,

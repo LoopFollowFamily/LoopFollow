@@ -6,8 +6,8 @@ import SwiftUI
 struct AlarmStepperSection: View {
     // MARK: – public parameters
 
-    let header: String?
-    let footer: String?
+    let header: LocalizedStringKey?
+    let footer: LocalizedStringKey?
     let title: String
     let range: ClosedRange<Double>
     let step: Double
@@ -21,8 +21,8 @@ struct AlarmStepperSection: View {
     // MARK: – designated initialiser (Double?)
 
     init(
-        header: String? = nil,
-        footer: String? = nil,
+        header: LocalizedStringKey? = nil,
+        footer: LocalizedStringKey? = nil,
         title: String,
         range: ClosedRange<Double>,
         step: Double,
@@ -42,8 +42,8 @@ struct AlarmStepperSection: View {
 
     /// Same API but for **`Binding<Int?>`** — it bridges to Double internally.
     init(
-        header: String? = nil,
-        footer: String? = nil,
+        header: LocalizedStringKey? = nil,
+        footer: LocalizedStringKey? = nil,
         title: String,
         range: ClosedRange<Double>,
         step: Double,

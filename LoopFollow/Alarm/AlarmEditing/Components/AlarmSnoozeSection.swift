@@ -38,13 +38,7 @@ struct AlarmSnoozeSection: View {
     var body: some View {
         Section(
             header: Text("SNOOZE"),
-            footer: Text(
-                """
-                “Default Snooze” controls the default value for how long the alert stays quiet after you press Snooze. \
-                "A snooze duration of 0 means the alarm is acknowledged (silenced), and will alert again next time the condition applies, without time limitation. " \
-                Toggle “Snoozed” to mute this alarm right now.
-                """
-            )
+            footer: Text("\"Default Snooze\" controls the default value for how long the alert stays quiet after you press Snooze. A snooze duration of 0 means the alarm is acknowledged (silenced), and will alert again next time the condition applies, without time limitation. Toggle \"Snoozed\" to mute this alarm right now.")
         ) {
             Stepper(
                 value: defaultSnoozeBinding,

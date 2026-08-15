@@ -6,6 +6,7 @@
 	objectVersion = 70;
 	objects = {
 
+
 /* Begin PBXBuildFile section */
 		37A4BDDB2F5B6B4A00EEB289 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A4BDDA2F5B6B4A00EEB289 /* WidgetKit.framework */; };
 		37A4BDDD2F5B6B4A00EEB289 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 37A4BDDC2F5B6B4A00EEB289 /* SwiftUI.framework */; };
@@ -313,6 +314,7 @@
 			knownRegions = (
 				en,
 				Base,
+				nb,
 			);
 			mainGroup = FC97880B2485969B00A7906C;
 			packageReferences = (

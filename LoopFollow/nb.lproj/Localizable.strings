@@ -1,0 +1,360 @@
+/* Norwegian Bokmål (nb) localizations for LoopFollow
+   Norsk bokmål oversettelser for LoopFollow */
+
+// MARK: - Alarm Type Names
+"Temporary Alert" = "Midlertidig varsel";
+"IOB Alert" = "IOB-varsel";
+"COB Alert" = "KH-varsel";
+"Low BG Alert" = "Lavt blodsukkvarsel";
+"High BG Alert" = "Høyt blodsukkvarsel";
+"Fast Drop Alert" = "Raskt fall-varsel";
+"Fast Rise Alert" = "Raskt stigning-varsel";
+"Missed Reading Alert" = "Manglende lesing-varsel";
+"Not Looping Alert" = "Loop-varsel";
+"Missed Bolus Alert" = "Glemt bolus-varsel";
+"Future Carbs Alert" = "Fremtidig KH-varsel";
+"Sensor Change Alert" = "Sensorskifte-varsel";
+"Pump Change Alert" = "Pumpeskifte-varsel";
+"Pump Insulin Alert" = "Pumpe insulinnivå-varsel";
+"Pump Battery Alert" = "Pumpebatteri-varsel";
+"Low Battery" = "Lavt batteri";
+"Battery Drop" = "Batterifall";
+"Rec. Bolus" = "Anbefalt bolus";
+"Override Started" = "Override startet";
+"Override Ended" = "Override avsluttet";
+"Temp Target Started" = "Midlertidig mål startet";
+"Temp Target Ended" = "Midlertidig mål avsluttet";
+"Looping app expiration" = "Looping-app utløper";
+"Nightscout Database Size" = "Nightscout databasestørrelse";
+
+// MARK: - Alarm Group Names
+"Glucose" = "Blodsukker";
+"Insulin / Food" = "Insulin / Mat";
+"Device / System" = "Enhet / System";
+"Override / Target" = "Override / Mål";
+
+// MARK: - Alarm Type Blurbs
+"Alerts when BG goes below a limit." = "Varsler når blodsukkeret faller under en grense.";
+"Alerts when BG rises above a limit." = "Varsler når blodsukkeret stiger over en grense.";
+"Rapid downward BG trend." = "Raskt fallende blodsukkertrend.";
+"Rapid upward BG trend." = "Raskt stigende blodsukkertrend.";
+"No CGM data for X minutes." = "Ingen CGM-data på X minutter.";
+"High insulin-on-board." = "Høyt aktivt insulin.";
+"High carbs-on-board." = "Høye aktive karbohydrater.";
+"Carbs without bolus." = "Karbohydrater uten bolus.";
+"Reminder when future carbs are due." = "Påminnelse når fremtidige karbohydrater forfaller.";
+"Recommended bolus issued." = "Anbefalt bolus utstedt.";
+"Phone battery low." = "Lavt telefonbatteri.";
+"Battery drops quickly." = "Batteriet faller raskt.";
+"Reservoir level low." = "Lavt reservoirnivå.";
+"Pump battery low." = "Lavt pumpebatteri.";
+"Pump change due." = "Pumpeskifte forfalt.";
+"Sensor change due." = "Sensorskifte forfalt.";
+"Loop hasn't completed." = "Loop har ikke fullført.";
+"Looping-app build expiring." = "Looping-app-bygg utløper.";
+"Nightscout database filling up." = "Nightscout-database fyller seg.";
+"Override just started." = "Override akkurat startet.";
+"Override ended." = "Override avsluttet.";
+"Temp target started." = "Midlertidig mål startet.";
+"Temp target ended." = "Midlertidig mål avsluttet.";
+"One-time BG limit alert." = "Engangsvarsel for blodsukkernivå.";
+
+// MARK: - Notification Actions
+"Acknowledge" = "Bekreft";
+"Snooze" = "Slumre";
+
+// MARK: - Background Refresh Notifications
+"LoopFollow Background Refresh" = "LoopFollow bakgrunnsoppdatering";
+"App inactive for 6 minutes. Open to resume." = "Appen har vært inaktiv i 6 minutter. Åpne for å fortsette.";
+"App inactive for 12 minutes. Open to resume." = "Appen har vært inaktiv i 12 minutter. Åpne for å fortsette.";
+"App inactive for 18 minutes. Open to resume." = "Appen har vært inaktiv i 18 minutter. Åpne for å fortsette.";
+"App inactive for 6 minutes. Verify Bluetooth connectivity." = "Appen har vært inaktiv i 6 minutter. Sjekk Bluetooth-tilkoblingen.";
+"App inactive for 12 minutes. Verify Bluetooth connectivity." = "Appen har vært inaktiv i 12 minutter. Sjekk Bluetooth-tilkoblingen.";
+"App inactive for 18 minutes. Verify Bluetooth connectivity." = "Appen har vært inaktiv i 18 minutter. Sjekk Bluetooth-tilkoblingen.";
+
+// MARK: - Add Alarm Sheet UI
+"Add Alarm" = "Legg til varsel";
+"Search alarms" = "Søk etter varsler";
+"No Results" = "Ingen resultater";
+"Cancel" = "Avbryt";
+
+// MARK: - Alarm General Section
+"General" = "Generelt";
+"Give each alarm a unique name—especially if you've added more than one of the same kind—so you can tell them apart at a glance." = "Gi hvert varsel et unikt navn – spesielt hvis du har lagt til mer enn ett av samme type – slik at du kan skille dem fra hverandre ved første øyekast.";
+"Name" = "Navn";
+"Alarm Name" = "Varselnavn";
+"Enabled" = "Aktivert";
+
+// MARK: - Alarm Active Section
+"Active During" = "Aktiv i";
+"Active" = "Aktiv";
+
+// MARK: - Alarm Snooze Section
+"SNOOZE" = "SLUMRE";
+"\"Default Snooze\" controls the default value for how long the alert stays quiet after you press Snooze. A snooze duration of 0 means the alarm is acknowledged (silenced), and will alert again next time the condition applies, without time limitation. Toggle \"Snoozed\" to mute this alarm right now." = "«Standard slumre» styrer standardverdien for hvor lenge varselet er stille etter at du trykker Slumre. En slumrevarighet på 0 betyr at alarmen er bekreftet (stilnet), og vil varsle igjen neste gang betingelsen gjelder, uten tidsbegrensning. Skift «Slumret» for å dempe denne alarmen akkurat nå.";
+"Default Snooze:" = "Standard slumre:";
+"Snoozed" = "Slumret";
+"Until" = "Til";
+
+// MARK: - Alarm Audio Section
+"Alert Sound" = "Varselslyd";
+"Tone" = "Lyd";
+"Play" = "Spill";
+"Repeat" = "Gjenta";
+"Delay Between Sounds" = "Forsinkelse mellom lyder";
+"Off" = "Av";
+"Custom" = "Egendefinert";
+"Custom sounds stay on this device and aren't included in settings export." = "Egendefinerte lyder lagres på denne enheten og er ikke inkludert i innstillingseksport.";
+"Import Sound…" = "Importer lyd…";
+"Built-in" = "Innebygd";
+"Choose Tone" = "Velg lyd";
+"Done" = "Ferdig";
+"Import Failed" = "Import mislyktes";
+
+// MARK: - Delete Alarm Section
+"Delete Alarm" = "Slett varsel";
+"Delete this alarm?" = "Slette dette varselet?";
+"Delete" = "Slett";
+
+// MARK: - InfoBanner Texts
+
+/* LowBgAlarmEditor */
+"This warns you if the glucose is too low now or might be soon, based on the forecast." = "Dette varsler deg hvis blodsukkeret er for lavt nå eller kan bli det snart, basert på prognosen.";
+
+/* HighBgAlarmEditor */
+"Alerts when glucose stays above the limit you set below. Use Persistent if you want to ignore brief spikes." = "Varsler når blodsukkeret holder seg over grensen du setter nedenfor. Bruk Vedvarende hvis du vil ignorere korte topper.";
+
+/* FastDropAlarmEditor */
+"Alerts when glucose readings drop rapidly. For example, three straight readings each falling by at least the amount you set. Optionally limit alerts to only fire below a certain BG level." = "Varsler når blodsukkermålinger faller raskt. For eksempel tre påfølgende målinger som hver faller med minst det angitte beløpet. Kan eventuelt begrenses til å kun utløses under et visst blodsukkernivå.";
+
+/* FastRiseAlarmEditor */
+"Alerts when glucose readings rise rapidly. For example, three straight readings each climbing by at least the amount you set. Optionally limit alerts to only fire above a certain BG." = "Varsler når blodsukkermålinger stiger raskt. For eksempel tre påfølgende målinger som hver stiger med minst det angitte beløpet. Kan eventuelt begrenses til å kun utløses over et visst blodsukkernivå.";
+
+/* MissedReadingEditor */
+"This warns you if the glucose monitor stops sending readings for too long.." = "Dette varsler deg hvis glukosemonitoren slutter å sende målinger for lenge.";
+
+/* NotLoopingAlarmEditor */
+"Alerts when no successful loop has occurred for the time you set below." = "Varsler når ingen vellykket loop har skjedd i løpet av tiden du angir nedenfor.";
+
+/* IOBAlarmEditor */
+"Alerts when insulin-on-board is high, or when several boluses in quick succession exceed the limits you set." = "Varsler når aktivt insulin er høyt, eller når flere bolusinjeksjoner i rask rekkefølge overstiger grensene du angir.";
+
+/* COBAlarmEditor */
+"Alerts when Carbs-on-Board is at or above the amount you set below." = "Varsler når aktive karbohydrater er lik eller over mengden du angir nedenfor.";
+
+/* MissedBolusAlarmEditor */
+"Alerts when carbs are logged but no bolus is delivered within the delay below. Allows small-carb / treatment exclusions and pre-bolus detection." = "Varsler når karbohydrater er registrert men ingen bolus er gitt innen forsinkelsen nedenfor. Tillater unntak for små karbohydrater / behandlinger og deteksjon av forbolus.";
+
+/* FutureCarbsAlarmEditor */
+"Alerts when a future-dated carb entry's scheduled time arrives — a reminder to start eating. Use the max lookahead to ignore fat/protein entries that are typically scheduled further ahead." = "Varsler når planlagt tidspunkt for en fremtidig karbohydratregistrering ankommer – en påminnelse om å begynne å spise. Bruk maks forhåndsperiode for å ignorere fett-/proteinregistreringer som vanligvis planlegges lenger frem i tid.";
+
+/* RecBolusAlarmEditor */
+"Alerts when the recommended bolus equals or exceeds the threshold you set below." = "Varsler når anbefalt bolus er lik eller overstiger grensen du angir nedenfor.";
+
+/* PhoneBatteryAlarmEditor */
+"This warns you when the phone's battery gets low, based on the percentage you choose." = "Dette varsler deg når telefonens batteri blir lavt, basert på prosentandelen du velger.";
+
+/* BatteryDropAlarmEditor */
+"This warns you if your phone's battery drops quickly, based on the percentage and time you set." = "Dette varsler deg hvis telefonens batteri faller raskt, basert på prosentandelen og tiden du angir.";
+
+/* PumpBatteryAlarmEditor */
+"This warns you when the pump's battery gets low, based on the percentage you choose." = "Dette varsler deg når pumpens batteri blir lavt, basert på prosentandelen du velger.";
+
+/* PumpVolumeAlarmEditor */
+"This warns you when the insulin pump is running low on insulin." = "Dette varsler deg når insulinpumpen er i ferd med å gå tom for insulin.";
+
+/* PumpChangeAlarmEditor */
+"Alerts when the pump / cannula is within the time window you choose below (relative to the 3-day change limit)." = "Varsler når pumpen / kanylen er innenfor tidsvinduet du velger nedenfor (relativt til 3-dagersgrensen for skifte).";
+
+/* SensorAgeAlarmEditor */
+"Warn me before the sensor's %lld-day change-over." = "Advar meg før sensorens %lld-dagers skifte.";
+
+/* BuildExpireAlarmEditor */
+"Sends a reminder before the looping-app build you're following reaches its TestFlight or Xcode expiry date. Works with Trio 0.4 and later." = "Sender en påminnelse før looping-app-bygget du følger når sin TestFlight- eller Xcode-utløpsdato. Fungerer med Trio 0.4 og nyere.";
+
+/* DBSizeAlarmEditor */
+"This warns you when the Nightscout database has filled the percentage you choose. Nightscout measures the used space against its own DBSIZE_MAX setting, which is 496 MiB unless the site owner changed it, so the percentage is only meaningful when that setting matches the real hosting limit." = "Dette varsler deg når Nightscout-databasen har fylt prosentandelen du velger. Nightscout måler brukt plass mot sin egen DBSIZE_MAX-innstilling, som er 496 MiB med mindre nettstedseieren endret den, så prosentandelen er kun meningsfull når den innstillingen samsvarer med den faktiske vertsgrensen.";
+
+/* OverrideEndAlarmEditor */
+"Alerts when an override ends." = "Varsler når en override avsluttes.";
+
+/* OverrideStartAlarmEditor */
+"Alerts when an override begins." = "Varsler når en override starter.";
+
+/* TempTargetEndAlarmEditor */
+"Alerts when a temp target ends." = "Varsler når et midlertidig mål avsluttes.";
+
+/* TempTargetStartAlarmEditor */
+"Alerts when a temp target starts." = "Varsler når et midlertidig mål starter.";
+
+/* TemporaryAlarmEditor */
+"This alert fires once when glucose crosses either of the limits you set below, and then disables itself." = "Dette varselet utløses én gang når blodsukkeret krysser en av grensene du angir nedenfor, og deaktiverer seg selv.";
+"⚠️ Please enable at least one limit." = "⚠️ Aktiver minst én grense.";
+
+// MARK: - Section Headers and Footers
+
+/* High BG */
+"High Glucose Limit" = "Øvre blodsukkrgrense";
+"The alert becomes eligible once any reading is at or above this value." = "Varselet utløses når en måling er lik eller over denne verdien.";
+"Persistent High" = "Vedvarende høyt";
+"How long glucose must remain above the threshold before the alarm actually fires. Set to 0 for an immediate alert." = "Hvor lenge blodsukkeret må holde seg over terskelen før alarmen faktisk utløses. Sett til 0 for et øyeblikkelig varsel.";
+"FALLING BG" = "FALLENDE BLODSUKKER";
+"Stay silent while BG is falling. The alert only sounds when the latest reading is flat or still rising." = "Vær stille mens blodsukkeret faller. Varselet lyder kun når den siste målingen er flat eller fortsatt stiger.";
+
+/* Fast Drop */
+"Rate of Fall" = "Fallhastighet";
+"This is how much the glucose must drop to be considered a fast drop." = "Dette er hvor mye blodsukkeret må falle for å anses som et raskt fall.";
+"Consecutive Drops" = "Påfølgende fall";
+"Number of drops—each meeting the rate above—required before an alert fires." = "Antall fall – som hver oppfyller hastigheten ovenfor – som kreves før et varsel utløses.";
+"BG Limit" = "Blodsukkrgrense";
+"When enabled, this alert only fires if the glucose is below the limit you set." = "Når aktivert utløses dette varselet kun hvis blodsukkeret er under grensen du angir.";
+
+/* Fast Rise */
+"Rate of Rise" = "Stigningshastighet";
+"This is how much the glucose must rise to be considered a fast rise." = "Dette er hvor mye blodsukkeret må stige for å anses som en rask stigning.";
+"Consecutive Rises" = "Påfølgende stigninger";
+"Number of rises—each meeting the rate above—required before an alert fires." = "Antall stigninger – som hver oppfyller hastigheten ovenfor – som kreves før et varsel utløses.";
+"When enabled, this alert only fires if the glucose is above the limit you set." = "Når aktivert utløses dette varselet kun hvis blodsukkeret er over grensen du angir.";
+
+/* Missed Reading */
+"Reading Delay" = "Lesingsforsinkelse";
+"Choose how long the app should wait before alerting." = "Velg hvor lenge appen skal vente før den varsler.";
+
+/* Not Looping */
+"No Loop for…" = "Ingen loop i…";
+"Number of minutes since the last successful loop. When this time has elapsed, the alarm becomes eligible." = "Antall minutter siden siste vellykkede loop. Når denne tiden har gått, blir alarmen kvalifisert til å utløses.";
+"Low Limit" = "Nedre grense";
+"Alert only if BG is equal to or below this value." = "Varsle kun hvis blodsukkeret er lik eller under denne verdien.";
+"High Limit" = "Øvre grense";
+"Alert only if BG is equal to or above this value." = "Varsle kun hvis blodsukkeret er lik eller over denne verdien.";
+
+/* IOB */
+"Boluses Size Limit" = "Grense for bolussize";
+"This counts only boluses larger than this size." = "Dette teller bare bolusinjeksjoner som er større enn denne størrelsen.";
+"Bolus Count" = "Bolusantall";
+"Number of qualifying boluses needed to trigger." = "Antall kvalifiserende bolusinjeksjoner som trengs for å utløse.";
+"Time Window" = "Tidsvindu";
+"How far back to look for those boluses." = "Hvor langt tilbake det skal letes etter bolusinjeksjoner.";
+"Insulin On Board" = "Aktivt insulin";
+"Alert if current IOB or total boluses reach this." = "Varsle hvis gjeldende aktivt insulin eller totale bolusinjeksjoner når dette.";
+
+/* COB */
+"Carbs-on-Board Limit" = "Grense for aktive karbohydrater";
+"Alert when Carbs-on-Board is at or above this number." = "Varsle når aktive karbohydrater er lik eller over dette tallet.";
+
+/* Missed Bolus */
+"Delay" = "Forsinkelse";
+"Minutes to wait after the carb entry before checking for a bolus." = "Minutter å vente etter karbohydratregistreringen før det sjekkes for en bolus.";
+"Pre-bolus" = "Forbolus";
+"Count boluses given up to this many minutes before the carb entry as valid." = "Tell bolusinjeksjoner gitt opptil dette mange minutter før karbohydratregistreringen som gyldige.";
+"Ignore small boluses" = "Ignorer små bolusdoser";
+"Boluses at or below this size are ignored." = "Bolusinjeksjoner lik eller under denne størrelsen ignoreres.";
+"Ignore small carbs" = "Ignorer små karbohydrater";
+"Carb entries at or below this amount will not trigger the alarm." = "Karbohydratregistreringer lik eller under dette beløpet vil ikke utløse alarmen.";
+"Ignore low BG" = "Ignorer lavt blodsukker";
+"Only alert if the current BG is above this value." = "Varsle kun hvis gjeldende blodsukker er over denne verdien.";
+
+/* Future Carbs */
+"Max Lookahead" = "Maks forhåndsperiode";
+"Only track carb entries scheduled up to this many minutes in the future. Entries beyond this window are ignored." = "Spor bare karbohydratregistreringer planlagt opptil dette mange minutter i fremtiden. Registreringer utover dette vinduet ignoreres.";
+"Minimum Carbs" = "Minimum karbohydrater";
+"Ignore carb entries below this amount." = "Ignorer karbohydratregistreringer under dette beløpet.";
+
+/* Rec Bolus */
+"Threshold" = "Terskel";
+"Alert when recommended bolus is at or above this value." = "Varsle når anbefalt bolus er lik eller over denne verdien.";
+
+/* Phone Battery */
+"Phone Battery Level" = "Telefonbatterinivå";
+"This alerts you when the phone battery drops to or below this level." = "Dette varsler deg når telefonbatteriet faller til eller under dette nivået.";
+"CHARGING" = "LADER";
+"Stay silent while the phone is charging. Requires the uploader to report charging status; if it doesn't, the alert still sounds." = "Vær stille mens telefonen lader. Krever at opplasteren rapporterer ladestatus; hvis den ikke gjør det, lyder varselet fortsatt.";
+"Skip while charging" = "Hopp over mens lader";
+
+/* Battery Drop */
+"Phone Battery Drop" = "Telefonbatterifall";
+"This alerts you if the phone battery drops by this much or more." = "Dette varsler deg hvis telefonbatteriet faller med dette mye eller mer.";
+"Over This Time" = "Over denne tid";
+"How far back to look for that drop." = "Hvor langt tilbake det skal letes etter det fallet.";
+
+/* Pump Battery */
+"Pump Battery Level" = "Pumpebatterinivå";
+"This alerts you when the pump battery drops to or below this level." = "Dette varsler deg når pumpebatteriet faller til eller under dette nivået.";
+
+/* Pump Volume */
+"Trigger Level" = "Utløsernivå";
+"An alert fires once the reservoir is at this value or lower." = "Et varsel utløses når reservoaret er på denne verdien eller lavere.";
+
+/* Pump Change */
+"Advance Notice" = "Forhåndsvarsel";
+"How many hours before the 3-day limit you'd like a reminder." = "Hvor mange timer før 3-dagersgrensen du vil ha en påminnelse.";
+
+/* Sensor Age */
+"Sensor Lifetime" = "Sensorlevetid";
+"Number of days your CGM sensor lasts (e.g. 10 for Dexcom G6, 15 for G7 15-day)." = "Antall dager CGM-sensoren din varer (f.eks. 10 for Dexcom G6, 15 for G7 15-dagers).";
+"Early Reminder" = "Tidlig påminnelse";
+"Number of hours before the %lld-day mark that the alert will fire." = "Antall timer før %lld-dagersmerket som varselet vil utløses.";
+
+/* Build Expire */
+"Notice Period" = "Varslingsperiode";
+"Choose how many days of notice you'd like before the build becomes unusable." = "Velg hvor mange dagers varsel du vil ha før bygget blir ubrukelig.";
+
+/* DB Size */
+"Database Size" = "Databasestørrelse";
+"This alerts you when the database reaches or exceeds this percentage of the limit configured on the Nightscout site." = "Dette varsler deg når databasen når eller overstiger denne prosentandelen av grensen konfigurert på Nightscout-nettstedet.";
+
+/* Low BG */
+"Alert when any reading or forecast is at or below this value." = "Varsle når en måling eller prognose er lik eller under denne verdien.";
+"PERSISTENCE" = "VEDVARENDE";
+"Glucose must stay below the threshold for this many minutes before the alert sounds. Set 0 to alert immediately." = "Blodsukkeret må holde seg under terskelen i dette mange minutter før varselet lyder. Sett til 0 for å varsle umiddelbart.";
+"PREDICTION" = "PROGNOSE";
+"Look ahead this many minutes in the forecast; if any future value is at or below the threshold, you'll be warned early. Set 0 to disable." = "Se frem dette mange minutter i prognosen; hvis en fremtidig verdi er lik eller under terskelen, vil du bli varslet tidlig. Sett til 0 for å deaktivere.";
+"RISING BG" = "STIGENDE BLODSUKKER";
+"Stay silent while BG is rising. The alert only sounds when the latest reading is flat or still falling." = "Vær stille mens blodsukkeret stiger. Varselet lyder kun når den siste målingen er flat eller fortsatt faller.";
+"Skip if BG is rising" = "Hopp over hvis blodsukker stiger";
+"Skip if BG is falling" = "Hopp over hvis blodsukker faller";
+
+/* Temporary Alarm */
+"Alert if BG is equal to or below this value." = "Varsle hvis blodsukkeret er lik eller under denne verdien.";
+"Alert if BG is equal to or above this value." = "Varsle hvis blodsukkeret er lik eller over denne verdien.";
+"Enable low limit" = "Aktiver nedre grense";
+"Enable high limit" = "Aktiver øvre grense";
+"Use BG Limit" = "Bruk blodsukkergrense";
+
+/* Stepper values */
+"At or Above" = "Lik eller over";
+"At or Below" = "Lik eller under";
+"Above" = "Over";
+"Below" = "Under";
+"Persistent" = "Vedvarende";
+"Predictive" = "Prognose";
+"Elapsed time" = "Forløpt tid";
+"Persistent for" = "Vedvarende i";
+"Reservoir Below" = "Reservoir under";
+"No reading for" = "Ingen lesing i";
+"IOB Above" = "Aktivt insulin over";
+"Lifetime" = "Levetid";
+"Reminder Time" = "Påminnelsestid";
+"Days of notice" = "Dagers varsel";
+"Warning Time" = "Varseltid";
+"Drop Amount" = "Fallmengde";
+"Count" = "Antall";
+"Pre-Bolus Time" = "Forbolustid";
+"Rises in a row" = "Stigninger på rad";
+"Number of Drops" = "Antall fall";
+"Falls by" = "Faller med";
+"Rises by" = "Stiger med";
+"Time" = "Tid";
+"Lookahead" = "Forhåndsperiode";
+
+/* Units/Labels */
+"Boluses" = "Bolusdoser";
+"Units" = "Enheter";
+"Grams" = "Gram";
+
+// MARK: - Day/Night/Sound Options
+"Day & Night" = "Dag og natt";
+"Day" = "Dag";
+"Night" = "Natt";
+"Never" = "Aldri";
+"Always" = "Alltid";
