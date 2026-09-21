@@ -34,6 +34,7 @@ jobs:
           
           # Ensure that gh exit codes are handled when output is piped.
           set -o pipefail
+          echo "has_permission=false" >> $GITHUB_OUTPUT
           
           # Define patterns to validate the access token (GH_PAT) and distinguish between classic and fine-grained tokens.
           GH_PAT_CLASSIC_PATTERN='^ghp_[a-zA-Z0-9]{36}$'
@@ -41,8 +42,7 @@ jobs:
           
           # Validate Access Token (GH_PAT)
           if [ -z "$GH_PAT" ]; then
-            failed=true
-            echo "::error::The GH_PAT secret is unset or empty. Set it and try again."
+            echo "::warning::The GH_PAT secret is unset or empty. Scheduled sync/build will be skipped."
           else
             if [[ $GH_PAT =~ $GH_PAT_CLASSIC_PATTERN ]]; then
               provides_scopes=true
@@ -56,11 +56,10 @@ jobs:
             
             # Attempt to capture the x-oauth-scopes scopes of the token.
             if ! scopes=$(curl -sS -f -I -H "Authorization: token $GH_PAT" https://api.github.com | { grep -i '^x-oauth-scopes:' || true; } | cut -d ' ' -f2- | tr -d '\r'); then
-              failed=true
-              if [ $unknown_format ]; then
-                echo "::error::Unable to connect to GitHub using the GH_PAT secret. Verify that it is set correctly (including the 'ghp_' or 'github_pat_' prefix) and try again."
+              if [[ "${unknown_format:-false}" == "true" ]]; then
+                echo "::warning::Unable to connect to GitHub using the GH_PAT secret. Verify that it is set correctly (including the 'ghp_' or 'github_pat_' prefix). Scheduled sync/build will be skipped."
               else
-                echo "::error::Unable to connect to GitHub using the GH_PAT secret. Verify that the token exists and has not expired at https://github.com/settings/tokens. If necessary, regenerate or create a new token (and update the secret), then try again."
+                echo "::warning::Unable to connect to GitHub using the GH_PAT secret. Verify that the token exists and has not expired at https://github.com/settings/tokens. Scheduled sync/build will be skipped."
               fi
             elif [[ $scopes =~ workflow ]]; then
               echo "The GH_PAT secret has repo and workflow permissions."
@@ -68,22 +67,16 @@ jobs:
             elif [[ $scopes =~ repo ]]; then
               echo "The GH_PAT secret has repo (but not workflow) permissions."
             elif [ $provides_scopes ]; then
-              failed=true
               if [ -z "$scopes" ]; then
                 echo "The GH_PAT secret is valid and can be used to connect to GitHub, but it does not provide any permission scopes."
               else
                 echo "The GH_PAT secret is valid and can be used to connect to GitHub, but it only provides the following permission scopes: $scopes"
               fi
-              echo "::error::The GH_PAT secret is lacking at least the 'repo' permission scope required to access the Match-Secrets repository. Update the token permissions at https://github.com/settings/tokens (to include the 'repo' and 'workflow' scopes) and try again."
+              echo "::warning::The GH_PAT secret is lacking at least the 'repo' scope required for automated sync/build. Update token permissions to include 'repo' and 'workflow'. Scheduled sync/build will be skipped."
             else
               echo "The GH_PAT secret is valid and can be used to connect to GitHub, but it does not provide inspectable scopes. Assuming that the 'repo' and 'workflow' permission scopes required to access the Match-Secrets repository and perform automations are present."
               echo "has_permission=true" >> $GITHUB_OUTPUT
             fi
-          fi
-          
-          # Exit unsuccessfully if secret validation failed.
-          if [ $failed ]; then
-            exit 2
           fi
 
       - name: Checkout target repo
